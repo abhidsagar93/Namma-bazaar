@@ -1,0 +1,172 @@
+erDiagram
+    PROFILES ||--o{ STORE_STAFF : "manages stores via"
+    PROFILES ||--o{ USER_ROLES : "holds"
+    PROFILES ||--o{ ORDERS : "places"
+    PROFILES ||--o{ CUSTOMER_ADDRESSES : "has"
+    PROFILES ||--o| DELIVERY_PARTNERS : "may be"
+    PROFILES ||--o{ NOTIFICATIONS : "receives"
+    PROFILES ||--o{ REVIEWS : "writes"
+    PROFILES ||--o{ OTP_VERIFICATIONS : "requests"
+
+    STORES ||--o{ STORE_STAFF : "staffed by"
+    STORES ||--o{ STORE_DOCUMENTS : "submits"
+    STORES ||--o| STORE_BANK_DETAILS : "has"
+    STORES ||--o{ PRODUCTS : "lists"
+    STORES ||--o{ ORDERS : "fulfills"
+    STORES ||--o{ REVIEWS : "receives"
+    STORES ||--o{ COUPONS : "creates"
+    STORES ||--o{ ADVERTISEMENTS : "runs"
+    STORES ||--o| WALLETS : "owns"
+    STORES }o--|| CATEGORIES : "belongs to"
+    STORES }o--|| CITIES : "located in"
+    STORES }o--o| SERVICE_ZONES : "served by"
+
+    CATEGORIES ||--o{ CATEGORIES : "parent of"
+    CATEGORIES ||--o{ PRODUCTS : "classifies"
+
+    PRODUCTS ||--o{ PRODUCT_OPTIONS : "defines"
+    PRODUCTS ||--o{ PRODUCT_VARIANTS : "sold as"
+    PRODUCTS ||--o{ PRODUCT_IMAGES : "shares gallery with"
+    PRODUCTS ||--o{ REVIEWS : "reviewed via"
+    PRODUCTS }o--o| BRANDS : "made by"
+
+    PRODUCT_OPTIONS ||--o{ PRODUCT_OPTION_VALUES : "has"
+    PRODUCT_VARIANTS }o--o{ PRODUCT_OPTION_VALUES : "combines via PRODUCT_VARIANT_OPTION_VALUES"
+    PRODUCT_VARIANTS ||--o| PRODUCT_IMAGES : "may override with"
+    PRODUCT_VARIANTS ||--|| INVENTORY : "tracked by"
+    PRODUCT_VARIANTS ||--o{ STOCK_MOVEMENTS : "logs"
+    PRODUCT_VARIANTS ||--o{ CART_ITEMS : "added as"
+    PRODUCT_VARIANTS ||--o{ ORDER_ITEMS : "sold as"
+
+    CARTS ||--o{ CART_ITEMS : "contains"
+    CARTS }o--|| PROFILES : "belongs to"
+    CARTS }o--|| STORES : "scoped to"
+
+    ORDERS ||--o{ ORDER_ITEMS : "contains"
+    ORDERS ||--o{ ORDER_STATUS_HISTORY : "tracked by"
+    ORDERS }o--|| CUSTOMER_ADDRESSES : "ships to"
+    ORDERS ||--o{ DELIVERY_ASSIGNMENTS : "offered via"
+    ORDERS }o--o| DELIVERY_PARTNERS : "currently assigned to"
+    ORDERS ||--o{ DELIVERY_TRACKING : "pinged during"
+    ORDERS }o--o| COUPONS : "discounted by"
+    ORDERS ||--o{ PAYMENT_TRANSACTIONS : "paid via"
+    ORDERS ||--o{ REFUNDS : "may have"
+    ORDER_ITEMS ||--o| REVIEWS : "reviewed once"
+
+    PAYMENT_TRANSACTIONS ||--o{ REFUNDS : "may be refunded by"
+
+    DELIVERY_PARTNERS ||--o{ DELIVERY_PARTNER_DOCUMENTS : "submits"
+    DELIVERY_PARTNERS ||--o{ DELIVERY_ASSIGNMENTS : "offered"
+    DELIVERY_PARTNERS ||--o{ DELIVERY_TRACKING : "sends"
+    DELIVERY_PARTNERS }o--|| CITIES : "operates in"
+
+    CITIES ||--o{ SERVICE_ZONES : "divided into"
+
+    WALLETS ||--o{ WALLET_TRANSACTIONS : "records"
+
+    PROFILES {
+        uuid id PK
+        text full_name
+        text phone
+        text email
+        enum primary_role
+        enum status
+    }
+    STORES {
+        uuid id PK
+        uuid owner_profile_id FK
+        uuid category_id FK
+        uuid city_id FK
+        text name
+        geography location
+        numeric delivery_radius_km
+        enum status
+        boolean verified
+    }
+    CATEGORIES {
+        uuid id PK
+        uuid parent_id FK
+        text name
+        text slug
+    }
+    PRODUCTS {
+        uuid id PK
+        uuid store_id FK
+        uuid category_id FK
+        text name
+        text slug
+        enum status
+        boolean featured
+    }
+    PRODUCT_VARIANTS {
+        uuid id PK
+        uuid product_id FK
+        text sku
+        numeric mrp
+        numeric selling_price
+        boolean is_default
+        enum status
+    }
+    INVENTORY {
+        uuid id PK
+        uuid variant_id FK
+        uuid store_id FK
+        integer quantity_on_hand
+        integer quantity_reserved
+    }
+    ORDERS {
+        uuid id PK
+        text order_number
+        uuid customer_id FK
+        uuid store_id FK
+        uuid delivery_partner_id FK
+        enum status
+        enum payment_status
+        numeric total_amount
+    }
+    ORDER_ITEMS {
+        uuid id PK
+        uuid order_id FK
+        uuid variant_id FK
+        uuid product_id FK
+        integer quantity
+        numeric line_total
+    }
+    PAYMENT_TRANSACTIONS {
+        uuid id PK
+        uuid order_id FK
+        enum provider
+        text provider_transaction_id
+        numeric amount
+        enum status
+        jsonb raw_response
+    }
+    DELIVERY_ASSIGNMENTS {
+        uuid id PK
+        uuid order_id FK
+        uuid delivery_partner_id FK
+        enum status
+        timestamptz offered_at
+        timestamptz responded_at
+    }
+    DELIVERY_PARTNERS {
+        uuid id PK
+        uuid profile_id FK
+        uuid city_id FK
+        geography current_location
+        boolean is_online
+    }
+    REVIEWS {
+        uuid id PK
+        uuid order_item_id FK
+        uuid product_id FK
+        uuid store_id FK
+        integer rating
+        enum status
+    }
+    CITIES {
+        uuid id PK
+        text name
+        text state
+        boolean is_active
+    }
