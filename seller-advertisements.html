@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advertisement Center — Namma Bazar Seller Console</title>
+<meta name="description" content="Create and manage advertisement campaigns to promote your store and products on Namma Bazar.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   NAMMA BAZAR — DESIGN TOKENS
+   ============================================================ */
+:root{
+  --green:#16A34A;
+  --green-dark:#0F7A38;
+  --green-light:#E8F6EC;
+  --orange:#F97316;
+  --orange-dark:#DC5F0A;
+  --orange-light:#FFEEE0;
+  --ink:#14231C;
+  --ink-soft:#4B5A52;
+  --mist:#F4F7F5;
+  --mist-deep:#EAF0EC;
+  --line:#E3E9E5;
+  --white:#FFFFFF;
+  --gold:#F5B301;
+
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --radius-pill:999px;
+
+  --shadow-sm:0 2px 8px rgba(20,35,28,0.06);
+  --shadow-md:0 8px 24px rgba(20,35,28,0.10);
+  --shadow-lg:0 20px 48px rgba(20,35,28,0.16);
+
+  --header-h:72px;
+  --nav-h:48px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--white);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input{font-family:inherit;}
+ul{list-style:none;}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);}
+.mono{font-family:var(--font-mono);}
+:focus-visible{outline:2.5px solid var(--green-dark);outline-offset:2px;border-radius:4px;}
+
+.container{max-width:1320px;margin:0 auto;padding:0 24px;}
+.section{padding:72px 0;}
+@media(max-width:768px){.section{padding:48px 0;}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:12px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;color:var(--green-dark);
+  margin-bottom:10px;
+}
+.eyebrow::before{content:'';width:18px;height:3px;background:linear-gradient(90deg,var(--green),var(--orange));border-radius:2px;}
+
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:32px;flex-wrap:wrap;}
+.section-head h2{font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-0.02em;}
+.section-head p{color:var(--ink-soft);margin-top:6px;font-size:15px;max-width:520px;}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-body);font-weight:600;font-size:15px;
+  padding:13px 24px;border-radius:var(--radius-pill);
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--green);color:var(--white);box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--green-dark);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.btn-accent{background:var(--orange);color:var(--white);box-shadow:var(--shadow-sm);}
+.btn-accent:hover{background:var(--orange-dark);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.btn-ghost{background:var(--white);color:var(--ink);border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--green);color:var(--green-dark);transform:translateY(-2px);}
+.btn-outline-white{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,0.55);}
+.btn-outline-white:hover{background:rgba(255,255,255,0.15);border-color:#fff;}
+.btn-sm{padding:9px 16px;font-size:13px;}
+.btn-block{width:100%;}
+.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
+.icon-sm{width:16px;height:16px;}
+
+.card{background:var(--white);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);border:1px solid var(--line);transition:transform .2s ease, box-shadow .2s ease;}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 9px;border-radius:var(--radius-pill);letter-spacing:0.02em;}
+.badge-green{background:var(--green-light);color:var(--green-dark);}
+.badge-orange{background:var(--orange-light);color:var(--orange-dark);}
+.badge-gold{background:#FFF7DC;color:#8A6300;}
+.badge-dark{background:var(--ink);color:var(--white);}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease;}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+.scroller{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:8px;-webkit-overflow-scrolling:touch;}
+.scroller::-webkit-scrollbar{height:6px;}
+.scroller::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+.scroller>*{scroll-snap-align:start;flex-shrink:0;}
+
+
+
+/* ============================================================
+   LOGO (missing from the dashboard's trimmed stylesheet — the
+   sidebar brand mark needs it; same fix as the other seller pages)
+   ============================================================ */
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.logo-mark{
+  width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(140deg,var(--green) 0%,var(--green-dark) 100%);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  box-shadow:0 4px 12px rgba(22,163,74,0.35);position:relative;flex-shrink:0;
+}
+.logo-mark svg{width:24px;height:24px;}
+.logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.logo-text .name{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-0.01em;}
+.logo-text .kn{font-size:10.5px;color:var(--ink-soft);letter-spacing:0.04em;}
+.skip-link{position:absolute;left:-999px;top:0;background:#fff;padding:10px 16px;z-index:999;border-radius:8px;}
+.skip-link:focus{left:16px;top:16px;}
+
+/* ============================================================
+   DASHBOARD SHELL
+   ============================================================ */
+html,body{height:100%;}
+body.dash-body-tag{background:var(--mist);}
+.dash-shell{display:flex;min-height:100vh;}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width:264px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;transition:width .22s ease;z-index:60;
+}
+.sidebar::-webkit-scrollbar{width:5px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+.sidebar.collapsed{width:80px;}
+.sb-head{display:flex;align-items:center;gap:10px;padding:18px 18px;border-bottom:1px solid var(--line);height:var(--header-h);}
+.sb-head .logo-text{overflow:hidden;white-space:nowrap;transition:opacity .18s;}
+.sidebar.collapsed .sb-head .logo-text{opacity:0;width:0;}
+.sb-collapse-btn{
+  margin-left:auto;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-soft);flex-shrink:0;
+}
+.sb-collapse-btn:hover{background:var(--mist);color:var(--green-dark);}
+.sidebar.collapsed .sb-collapse-btn{margin-left:0;}
+
+.sb-section{padding:16px 14px 6px;}
+.sb-section-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);padding:0 10px 8px;}
+.sidebar.collapsed .sb-section-label{display:none;}
+.sb-nav-item{
+  display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:var(--ink-soft);font-size:13.5px;font-weight:600;
+  margin-bottom:2px;position:relative;transition:background .15s,color .15s;white-space:nowrap;
+}
+.sb-nav-item:hover{background:var(--mist);color:var(--ink);}
+.sb-nav-item.active{background:var(--green-light);color:var(--green-dark);}
+.sb-nav-item svg{width:19px;height:19px;flex-shrink:0;}
+.sb-nav-item .sb-label{overflow:hidden;transition:opacity .18s;}
+.sidebar.collapsed .sb-label{opacity:0;width:0;}
+.sb-nav-item .sb-badge{
+  margin-left:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;padding:0 4px;flex-shrink:0;
+}
+.sidebar.collapsed .sb-nav-item .sb-badge{display:none;}
+.sb-tooltip{
+  position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--ink);color:#fff;
+  font-size:12px;font-weight:600;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .15s;z-index:70;
+}
+.sidebar.collapsed .sb-nav-item:hover .sb-tooltip{opacity:1;}
+.sb-logout{margin:10px 14px 20px;padding-top:14px;border-top:1px solid var(--line);}
+.sb-logout .sb-nav-item{color:var(--orange-dark);}
+.sb-logout .sb-nav-item:hover{background:var(--orange-light);}
+
+/* ---------- Main column ---------- */
+.dash-main{flex:1;min-width:0;display:flex;flex-direction:column;}
+.dash-topbar{
+  height:var(--header-h);position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 24px;
+}
+.tb-hamburger{display:none;width:38px;height:38px;border-radius:10px;align-items:center;justify-content:center;color:var(--ink-soft);flex-shrink:0;}
+.tb-hamburger:hover{background:var(--mist);}
+.tb-store{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.tb-store img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.tb-store .tb-store-name{font-family:var(--font-display);font-weight:700;font-size:14.5px;}
+.tb-search{flex:1;max-width:420px;}
+.tb-search .search-bar{background:var(--mist);border-radius:var(--radius-pill);display:flex;align-items:center;padding:4px 4px 4px 16px;border:1.5px solid transparent;}
+.tb-search .search-bar:focus-within{border-color:var(--green);background:#fff;}
+.tb-search input{flex:1;border:none;background:none;padding:9px;font-size:13.5px;}
+.tb-search input:focus{outline:none;}
+.tb-search .icon{color:var(--ink-soft);}
+.tb-actions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.tb-icon-btn{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink);}
+.tb-icon-btn:hover{background:var(--mist);}
+.tb-icon-btn .count{
+  position:absolute;top:2px;right:2px;background:var(--orange);color:#fff;font-size:9.5px;font-weight:700;min-width:16px;height:16px;
+  border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #fff;
+}
+.tb-divider{width:1px;height:26px;background:var(--line);margin:0 2px;}
+.tb-profile{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;border-radius:var(--radius-pill);}
+.tb-profile:hover{background:var(--mist);}
+.tb-profile img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.tb-profile .tb-profile-name{font-size:12.5px;font-weight:700;line-height:1.15;}
+.tb-profile .tb-profile-role{font-size:10.5px;color:var(--ink-soft);}
+
+/* ---------- Dropdown panels (notifications / messages / profile) ---------- */
+.tb-dropdown-wrap{position:relative;}
+.tb-dropdown{
+  position:absolute;top:calc(100% + 12px);right:0;width:340px;background:#fff;border-radius:var(--radius-md);
+  box-shadow:var(--shadow-lg);border:1px solid var(--line);z-index:80;display:none;overflow:hidden;
+}
+.tb-dropdown.open{display:block;}
+.tbd-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);}
+.tbd-head h4{font-size:13.5px;}
+.tbd-head a{font-size:11.5px;font-weight:700;color:var(--green-dark);}
+.tbd-list{max-height:340px;overflow-y:auto;}
+.tbd-item{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.tbd-item:last-child{border-bottom:none;}
+.tbd-item:hover{background:var(--mist);}
+.tbd-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tbd-text p{font-size:12.5px;font-weight:600;line-height:1.35;}
+.tbd-text span{font-size:11px;color:var(--ink-soft);}
+.tbd-menu-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;font-weight:600;color:var(--ink);}
+.tbd-menu-item:hover{background:var(--mist);}
+.tbd-menu-item svg{width:17px;height:17px;color:var(--ink-soft);}
+.tbd-menu-item.danger{color:var(--orange-dark);}
+
+/* ---------- Content layout ---------- */
+.dash-body-row{display:flex;gap:22px;padding:22px;align-items:flex-start;max-width:1680px;margin:0 auto;width:100%;}
+.dash-content{flex:1;min-width:0;display:flex;flex-direction:column;gap:22px;}
+.dash-right{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:20px;}
+@media(max-width:1240px){.dash-right{display:none;}}
+
+.dash-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:2px;}
+.dash-section-head h2{font-size:17px;font-weight:700;}
+.dash-section-head .dsh-sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+
+/* ---------- Welcome banner ---------- */
+.welcome-banner{
+  border-radius:var(--radius-lg);background:linear-gradient(120deg,#0F7A38 0%,#16A34A 55%,#0d6b3f 100%);
+  color:#fff;padding:28px 30px;position:relative;overflow:hidden;
+}
+.welcome-banner::after{content:'';position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,0.3),transparent 70%);}
+.wb-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;z-index:1;}
+.wb-top h1{color:#fff;font-size:24px;font-weight:800;margin-bottom:4px;}
+.wb-store-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+.wb-store-row .store-name{font-size:15px;font-weight:700;}
+.wb-date{font-size:12.5px;color:rgba(255,255,255,0.75);font-family:var(--font-mono);}
+.wb-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.wb-badge{background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.28);color:#fff;}
+.wb-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;position:relative;z-index:1;}
+
+/* ---------- KPI cards ---------- */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.kpi-card{padding:18px;display:flex;flex-direction:column;gap:10px;}
+.kpi-top{display:flex;align-items:flex-start;justify-content:space-between;}
+.kpi-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.kpi-trend{display:flex;align-items:center;gap:3px;font-size:11.5px;font-weight:700;font-family:var(--font-mono);}
+.kpi-trend.up{color:var(--green-dark);}
+.kpi-trend.down{color:var(--orange-dark);}
+.kpi-value{font-family:var(--font-mono);font-size:26px;font-weight:800;letter-spacing:-0.01em;}
+.kpi-label{font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+@media(max-width:1400px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.kpi-grid{grid-template-columns:1fr;}}
+
+/* ---------- Chart placeholders ---------- */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.chart-card{padding:20px;}
+.chart-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.chart-card-head h3{font-size:14.5px;}
+.chart-placeholder{
+  height:170px;border-radius:12px;background:
+    linear-gradient(var(--mist) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, var(--mist) 1px, transparent 1px) 0 0/24px 24px,#fff;
+  border:1.5px dashed var(--line);display:flex;align-items:flex-end;gap:6px;padding:16px;position:relative;
+}
+.chart-placeholder .bar{flex:1;background:linear-gradient(180deg,var(--green) 0%, var(--green-light) 140%);border-radius:5px 5px 0 0;opacity:0.85;}
+.chart-placeholder .bar:nth-child(odd){background:linear-gradient(180deg,var(--orange) 0%, var(--orange-light) 140%);}
+.chart-caption{font-size:11px;color:var(--ink-soft);margin-top:10px;display:flex;align-items:center;gap:6px;}
+@media(max-width:900px){.chart-grid{grid-template-columns:1fr;}}
+
+/* ---------- Tables ---------- */
+.table-card{padding:0;overflow:hidden;}
+.table-card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap;}
+.table-card-head h3{font-size:15px;}
+.table-wrap{overflow-x:auto;}
+table.dash-table{width:100%;border-collapse:collapse;min-width:640px;}
+.dash-table thead th{
+  text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);
+  padding:10px 20px;border-bottom:1px solid var(--line);background:var(--mist);white-space:nowrap;
+}
+.dash-table tbody td{padding:13px 20px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;white-space:nowrap;}
+.dash-table tbody tr:last-child td{border-bottom:none;}
+.dash-table tbody tr:hover{background:var(--mist);}
+.dt-customer{display:flex;align-items:center;gap:8px;}
+.dt-customer img{width:26px;height:26px;border-radius:50%;object-fit:cover;}
+.dt-amount{font-family:var(--font-mono);font-weight:700;}
+.stock-bar-wrap{width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px;}
+.stock-bar-fill{height:100%;border-radius:4px;}
+
+/* ---------- Customer cards ---------- */
+.customer-scroller{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;}
+.customer-card{width:220px;flex-shrink:0;padding:18px;text-align:center;}
+.customer-card img{width:56px;height:56px;border-radius:50%;object-fit:cover;margin:0 auto 10px;}
+.customer-card h4{font-size:14px;margin-bottom:2px;}
+.customer-card .cc-meta{font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;}
+.customer-card .cc-stats{display:flex;justify-content:center;gap:16px;margin-bottom:14px;}
+.customer-card .cc-stat b{display:block;font-family:var(--font-mono);font-size:15px;}
+.customer-card .cc-stat span{font-size:10.5px;color:var(--ink-soft);}
+
+/* ---------- Quick actions ---------- */
+.qa-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.qa-card{padding:20px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;}
+.qa-ic{width:46px;height:46px;border-radius:13px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;}
+.qa-card:nth-child(2n) .qa-ic{background:var(--orange-light);color:var(--orange-dark);}
+.qa-card span{font-size:12.5px;font-weight:700;}
+@media(max-width:1100px){.qa-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px){.qa-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ---------- Ad summary ---------- */
+.ad-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px;}
+.ad-stat{text-align:center;padding:14px 8px;border-radius:12px;background:var(--mist);}
+.ad-stat b{display:block;font-family:var(--font-mono);font-size:20px;}
+.ad-stat span{font-size:11px;color:var(--ink-soft);font-weight:600;}
+@media(max-width:640px){.ad-summary-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ---------- Performance cards ---------- */
+.perf-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.perf-card{padding:18px;}
+.perf-card .perf-label{font-size:12px;color:var(--ink-soft);font-weight:600;margin-bottom:8px;}
+.perf-card .perf-value{font-family:var(--font-mono);font-size:20px;font-weight:800;margin-bottom:10px;}
+.perf-bar{height:6px;border-radius:4px;background:var(--line);overflow:hidden;}
+.perf-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--green-dark));}
+@media(max-width:1200px){.perf-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px){.perf-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ---------- Right panel widgets ---------- */
+.rp-card{padding:0;overflow:hidden;}
+.rp-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);}
+.rp-head h3{font-size:14px;}
+.rp-head a{font-size:11.5px;font-weight:700;color:var(--green-dark);}
+.rp-list{max-height:400px;overflow-y:auto;}
+.snapshot-card{padding:18px;}
+.snapshot-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.snapshot-row:last-child{border-bottom:none;}
+.snapshot-row span:first-child{color:var(--ink-soft);}
+.status-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;}
+.status-toggle-row .stat-label{font-size:13px;font-weight:700;}
+.switch{position:relative;width:42px;height:24px;flex-shrink:0;}
+.switch input{opacity:0;width:100%;height:100%;position:absolute;margin:0;cursor:pointer;z-index:2;}
+.switch .track{position:absolute;inset:0;background:var(--line);border-radius:var(--radius-pill);transition:background .18s;}
+.switch .thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--shadow-sm);transition:transform .18s;}
+.switch input:checked ~ .track{background:var(--green);}
+.switch input:checked ~ .thumb{transform:translateX(18px);}
+
+/* ============================================================
+   MOBILE DRAWER SIDEBAR
+   ============================================================ */
+.sidebar-backdrop{position:fixed;inset:0;background:rgba(20,35,28,0.55);z-index:150;display:none;}
+.sidebar-backdrop.open{display:block;}
+
+@media(max-width:980px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;z-index:200;}
+  .sidebar.mobile-open{transform:translateX(0);}
+  .sidebar.collapsed{width:280px;}
+  .sidebar.collapsed .logo-text,.sidebar.collapsed .sb-label,.sidebar.collapsed .sb-section-label{opacity:1;width:auto;}
+  .tb-hamburger{display:flex;}
+  .sb-collapse-btn{display:none;}
+  .dash-body-row{padding:16px;flex-direction:column;}
+  .tb-search{display:none;}
+}
+@media(max-width:640px){
+  .dash-topbar{padding:0 14px;gap:10px;}
+  .tb-store .tb-store-name{display:none;}
+  .wb-actions .btn{flex:1;}
+}
+
+
+/* ============================================================
+   ADVERTISEMENT CENTER
+   ============================================================ */
+.ads-topline{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+.ads-topline .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft);}
+.ads-topline .breadcrumb a:hover{color:var(--green-dark);}
+.ads-topline h1{font-size:21px;font-weight:800;margin-top:4px;}
+
+.ad-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px;}
+.ad-kpi-card{padding:18px;}
+.ad-kpi-card .kpi-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.ad-kpi-card .kpi-value{font-family:var(--font-mono);font-size:22px;font-weight:800;}
+.ad-kpi-card .kpi-label{font-size:12px;color:var(--ink-soft);font-weight:600;margin-top:2px;}
+@media(max-width:1100px){.ad-kpi-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.ad-kpi-grid{grid-template-columns:1fr;}}
+
+.campaign-card{padding:0;overflow:hidden;margin-bottom:22px;}
+.campaign-card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);gap:12px;flex-wrap:wrap;}
+.campaign-card-head h3{font-size:15px;}
+.table-wrap{overflow-x:auto;}
+table.ad-table{width:100%;border-collapse:collapse;min-width:920px;}
+.ad-table thead th{
+  text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);
+  padding:10px 18px;border-bottom:1px solid var(--line);background:var(--mist);white-space:nowrap;
+}
+.ad-table tbody td{padding:14px 18px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;}
+.ad-table tbody tr:last-child td{border-bottom:none;}
+.ad-table tbody tr:hover{background:var(--mist);}
+.ad-campaign-name{display:flex;align-items:center;gap:10px;}
+.ad-campaign-thumb{width:44px;height:32px;border-radius:6px;object-fit:cover;background:var(--mist);flex-shrink:0;}
+.ad-campaign-name .meta{display:flex;flex-direction:column;}
+.ad-campaign-name .meta strong{font-size:13px;}
+.ad-campaign-name .meta span{font-size:11px;color:var(--ink-soft);}
+.ad-metric-cell{font-family:var(--font-mono);font-weight:600;}
+.ad-actions-cell{display:flex;gap:6px;flex-wrap:wrap;}
+.icon-action-sm{
+  width:32px;height:32px;border-radius:8px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;
+  color:var(--ink-soft);flex-shrink:0;transition:border-color .18s,color .18s,background .18s;
+}
+.icon-action-sm:hover{border-color:var(--green);color:var(--green-dark);background:var(--green-light);}
+.icon-action-sm.danger:hover{border-color:var(--orange);color:var(--orange-dark);background:var(--orange-light);}
+
+.empty-campaigns{text-align:center;padding:60px 24px;color:var(--ink-soft);}
+.empty-campaigns .es-icon{width:64px;height:64px;border-radius:18px;background:var(--mist);color:var(--ink-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+
+/* ---------- Create Campaign drawer ---------- */
+.drawer-backdrop{position:fixed;inset:0;background:rgba(20,35,28,0.55);z-index:400;display:none;}
+.drawer-backdrop.open{display:block;}
+.create-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:480px;max-width:100vw;background:#fff;z-index:401;
+  box-shadow:var(--shadow-lg);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s ease;
+}
+.create-drawer.open{transform:translateX(0);}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line);flex-shrink:0;}
+.drawer-header h3{font-size:16.5px;}
+.drawer-body{padding:20px 22px;overflow-y:auto;flex:1;}
+.drawer-footer{padding:16px 22px;border-top:1px solid var(--line);display:flex;gap:10px;flex-shrink:0;}
+.drawer-footer .btn{flex:1;}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.field label{font-size:13px;font-weight:700;color:var(--ink);}
+.field .hint{font-size:11.5px;color:var(--ink-soft);}
+.field .error-msg{font-size:11.5px;color:var(--orange-dark);font-weight:600;display:none;}
+.field.has-error .error-msg{display:block;}
+.field.has-error input,.field.has-error select,.field.has-error textarea{border-color:var(--orange);}
+.input,select.input,textarea.input{
+  width:100%;padding:11px 13px;border-radius:var(--radius-sm);border:1.5px solid var(--line);font-size:13.5px;
+  font-family:var(--font-body);color:var(--ink);background:#fff;transition:border-color .18s,box-shadow .18s;
+}
+.input:focus,select.input:focus,textarea.input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(22,163,74,0.1);}
+select.input{
+  appearance:none;-webkit-appearance:none;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%234B5A52" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>');
+  background-repeat:no-repeat;background-position:right 12px center;background-size:15px;padding-right:34px;
+}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.campaign-type-row{display:flex;gap:10px;margin-bottom:18px;}
+.campaign-type-opt{
+  flex:1;border:1.5px solid var(--line);border-radius:var(--radius-md);padding:14px;cursor:pointer;text-align:center;transition:all .18s;
+}
+.campaign-type-opt.selected{border-color:var(--green);background:var(--green-light);}
+.campaign-type-opt svg{width:22px;height:22px;color:var(--green-dark);margin-bottom:6px;}
+.campaign-type-opt strong{display:block;font-size:13px;}
+.campaign-type-opt span{font-size:11px;color:var(--ink-soft);}
+
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:7px 13px;border-radius:var(--radius-pill);font-size:12.5px;font-weight:600;border:1.5px solid var(--line);color:var(--ink-soft);transition:all .16s;cursor:pointer;}
+.chip.active{background:var(--green);color:#fff;border-color:var(--green);}
+
+.dropzone-sm{
+  border:2px dashed var(--line);border-radius:var(--radius-md);padding:20px;text-align:center;position:relative;
+  display:flex;flex-direction:column;align-items:center;gap:6px;background:var(--mist);
+}
+.dropzone-sm input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.dropzone-sm img{max-width:100%;max-height:100px;border-radius:8px;}
+
+@media(max-width:640px){
+  .create-drawer{width:100%;}
+  .field-row{grid-template-columns:1fr;}
+}
+
+.demo-hint{
+  background:var(--mist);border-radius:10px;padding:12px;font-size:11.5px;color:var(--ink-soft);
+  display:flex;gap:8px;align-items:flex-start;margin-top:4px;
+}
+.demo-hint svg{color:var(--green-dark);flex-shrink:0;margin-top:1px;}
+
+</style>
+</head>
+<body class="dash-body-tag">
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute">
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 8.6c0 4.9-8.8 10.1-8.8 10.1S3.2 13.5 3.2 8.6a4.9 4.9 0 0 1 8.8-3 4.9 4.9 0 0 1 8.8 3Z"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6.5 8-6.5s6.5 2 8 6.5"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11H3z"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l3 6.2 6.8.9-5 4.8 1.2 6.8L12 17.9 5.9 21.2l1.2-6.8-5-4.8 6.8-.9Z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 12l-8 8-9-9V3h8Z"/><circle cx="7" cy="7" r="1.4"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 8h11v9H2z"/><path d="M13 11h4l4 4v2h-8z"/><circle cx="6.5" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2l8 3.5v6c0 5-3.4 8.5-8 10.5-4.6-2-8-5.5-8-10.5v-6Z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-return" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/></symbol>
+<symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="5" height="7" rx="2"/><rect x="16.5" y="13" width="5" height="7" rx="2"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5.5-5.5L4 20"/></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24"><path d="M16.3 2.3c.2 1.2-.3 2.4-1 3.2-.8.9-2 1.6-3.2 1.5-.2-1.2.4-2.4 1.1-3.2.8-.9 2.1-1.5 3.1-1.5ZM19.8 17c-.6 1.4-.9 2-1.7 3.2-1.1 1.7-2.6 3.8-4.5 3.8-1.7 0-2.1-1.1-4.4-1.1-2.3 0-2.8 1.1-4.5 1.1-1.9 0-3.3-1.9-4.4-3.6C-1.6 16.6-.7 10 3 10c1.7 0 2.9 1.2 4.4 1.2 1.4 0 2.4-1.2 4.5-1.2 1.4 0 3.6.6 5 2.6-4.4 2.4-3.7 8.4 2.9 4.4Z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></symbol>
+<symbol id="i-fb" viewBox="0 0 24 24"><path d="M14 9h3V5h-3a4 4 0 0 0-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9a1 1 0 0 1 1-1Z"/></symbol>
+<symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></symbol>
+<symbol id="i-tw" viewBox="0 0 24 24"><path d="M22 5.9c-.7.3-1.5.6-2.3.7a4 4 0 0 0 1.8-2.2 8 8 0 0 1-2.5 1 4 4 0 0 0-6.9 3.6A11.4 11.4 0 0 1 3.8 4.6a4 4 0 0 0 1.3 5.3 4 4 0 0 1-1.8-.5v.1a4 4 0 0 0 3.2 3.9 4 4 0 0 1-1.8.1 4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 17.6a11.3 11.3 0 0 0 6.1 1.8c7.3 0 11.3-6 11.3-11.3v-.5A8 8 0 0 0 22 5.9Z"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+<symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2"/><path d="M8 11h8M8 15h5"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c1-3.6 3.7-5.5 6.5-5.5s5.5 1.9 6.5 5.5"/><circle cx="17" cy="8.5" r="2.6"/><path d="M17.5 14.6c2.2.5 3.7 2.1 4.5 5"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="5" rx="1.2"/><path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></symbol>
+<symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M3 10v4a1 1 0 0 0 1 1h2l9 5V4L6 9H4a1 1 0 0 0-1 1Z"/><path d="M18 9a4 4 0 0 1 0 6"/></symbol>
+<symbol id="i-percent" viewBox="0 0 24 24"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.4"/><circle cx="17" cy="17" r="2.4"/></symbol>
+<symbol id="i-bar-chart" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/><path d="M2 20h20"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v3"/><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="16.5" cy="13.5" r="1.4"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+<symbol id="i-help-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4.9c0 1.9-2.6 1.9-2.6 3.6"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></symbol>
+<symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="M3 6l9 6.5L21 6"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18.5" r="1.4"/></symbol>
+<symbol id="i-trending-up" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></symbol>
+<symbol id="i-trending-down" viewBox="0 0 24 24"><path d="M3 7l6 6 4-4 8 9"/><path d="M15 18h6v-6"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15.4-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.4 6.4L3 16"/><path d="M3 21v-5h5"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 1 21h22Z"/><path d="M12 9v5"/><circle cx="12" cy="17.3" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M21 12a8 8 0 1 1-3.5-6.6"/><path d="M21 3l-9 9"/><path d="M14 3h7v7"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4Z"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+<symbol id="i-play-fill" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8Z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-stop" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14" rx="2"/></symbol>
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.7" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-store-ad" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11H3z"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="8" r="0.6" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<div id="toast-stack"></div>
+
+<div class="dash-shell">
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeMobileSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="logo-mark"><svg class="icon" style="color:#fff"><use href="#i-store"/></svg></div>
+    <div class="logo-text">
+      <span class="name" style="font-size:16px;">Namma Bazar</span>
+      <span class="kn">Seller Console</span>
+    </div>
+    <button class="sb-collapse-btn" onclick="Sidebar.toggleCollapse()" aria-label="Collapse sidebar">
+      <svg class="icon icon-sm" id="collapse-icon"><use href="#i-chevron-left"/></svg>
+    </button>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-nav-item" onclick="location.href='seller-dashboard.html'">
+      <svg><use href="#i-layout"/></svg><span class="sb-label">Dashboard</span>
+      <span class="sb-tooltip">Dashboard</span>
+    </div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Catalog</div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/products')"><svg><use href="#i-box"/></svg><span class="sb-label">Products</span><span class="sb-tooltip">Products</span></div>
+    <div class="sb-nav-item" onclick="location.href='seller-add-product.html'"><svg><use href="#i-plus"/></svg><span class="sb-label">Add Product</span><span class="sb-tooltip">Add Product</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/categories')"><svg><use href="#i-list"/></svg><span class="sb-label">Categories</span><span class="sb-tooltip">Categories</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/inventory')"><svg><use href="#i-archive"/></svg><span class="sb-label">Inventory</span><span class="sb-tooltip">Inventory</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Sales</div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/orders')"><svg><use href="#i-clipboard"/></svg><span class="sb-label">Orders</span><span class="sb-badge">6</span><span class="sb-tooltip">Orders</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/customers')"><svg><use href="#i-users"/></svg><span class="sb-label">Customers</span><span class="sb-tooltip">Customers</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Marketing</div>
+    <div class="sb-nav-item active" onclick="Toast.show('You are already on Advertisements','i-megaphone')"><svg><use href="#i-megaphone"/></svg><span class="sb-label">Advertisements</span><span class="sb-tooltip">Advertisements</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/offers')"><svg><use href="#i-percent"/></svg><span class="sb-label">Offers &amp; Coupons</span><span class="sb-tooltip">Offers &amp; Coupons</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/reviews')"><svg><use href="#i-star"/></svg><span class="sb-label">Reviews</span><span class="sb-tooltip">Reviews</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Insights</div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/analytics')"><svg><use href="#i-bar-chart"/></svg><span class="sb-label">Analytics</span><span class="sb-tooltip">Analytics</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/wallet')"><svg><use href="#i-wallet"/></svg><span class="sb-label">Wallet</span><span class="sb-tooltip">Wallet</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">System</div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/notifications')"><svg><use href="#i-bell"/></svg><span class="sb-label">Notifications</span><span class="sb-badge">5</span><span class="sb-tooltip">Notifications</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/settings')"><svg><use href="#i-settings"/></svg><span class="sb-label">Settings</span><span class="sb-tooltip">Settings</span></div>
+    <div class="sb-nav-item" onclick="Nav.go('/seller/support')"><svg><use href="#i-help-circle"/></svg><span class="sb-label">Help &amp; Support</span><span class="sb-tooltip">Help &amp; Support</span></div>
+  </div>
+
+  <div class="sb-logout">
+    <div class="sb-nav-item" onclick="Auth.logout()"><svg><use href="#i-logout"/></svg><span class="sb-label">Logout</span><span class="sb-tooltip">Logout</span></div>
+  </div>
+</aside>
+
+  <div class="dash-main" id="main">
+<header class="dash-topbar">
+  <button class="tb-hamburger" onclick="openMobileSidebar()" aria-label="Open menu">
+    <svg class="icon"><use href="#i-menu"/></svg>
+  </button>
+
+  <div class="tb-store">
+    <img id="tb-store-logo" src="" alt="Store logo">
+    <span class="tb-store-name" id="tb-store-name">Store</span>
+  </div>
+
+  <div class="tb-search">
+    <div class="search-bar">
+      <svg class="icon icon-sm"><use href="#i-search"/></svg>
+      <input type="text" placeholder="Search campaigns..." id="tb-search-input" aria-label="Search campaigns" onkeydown="if(event.key==='Enter')AdCenter.searchCampaigns(this.value)">
+    </div>
+  </div>
+
+  <div class="tb-actions">
+    <div class="tb-dropdown-wrap">
+      <button class="tb-icon-btn" onclick="Dropdowns.toggle('notif')" aria-label="Notifications">
+        <svg class="icon"><use href="#i-bell"/></svg>
+        <span class="count">5</span>
+      </button>
+      <div class="tb-dropdown" id="dd-notif">
+        <div class="tbd-head"><h4>Notifications</h4><a href="index.html#/seller/notifications" onclick="Nav.go('/seller/notifications');return false;">View all</a></div>
+        <div class="tbd-list" id="tb-notif-list"></div>
+      </div>
+    </div>
+
+    <div class="tb-dropdown-wrap">
+      <button class="tb-icon-btn" onclick="Dropdowns.toggle('msg')" aria-label="Messages">
+        <svg class="icon"><use href="#i-mail"/></svg>
+        <span class="count">2</span>
+      </button>
+      <div class="tb-dropdown" id="dd-msg">
+        <div class="tbd-head"><h4>Messages</h4><a href="index.html#/seller/messages" onclick="Nav.go('/seller/messages');return false;">View all</a></div>
+        <div class="tbd-list" id="tb-msg-list"></div>
+      </div>
+    </div>
+
+    <div class="tb-divider"></div>
+
+    <div class="tb-dropdown-wrap">
+      <button class="tb-profile" onclick="Dropdowns.toggle('profile')">
+        <img id="tb-profile-logo" src="" alt="Store owner">
+        <span style="text-align:left;">
+          <span class="tb-profile-name" id="tb-profile-name" style="display:block;">Owner</span>
+          <span class="tb-profile-role">Store Owner</span>
+        </span>
+      </button>
+      <div class="tb-dropdown" id="dd-profile" style="width:220px;">
+        <div class="tbd-head"><h4>My Account</h4></div>
+        <a class="tbd-menu-item" href="stores.html#/store/current" onclick="Toast.show('Opening your public store page','i-store')"><svg><use href="#i-store"/></svg> View My Store</a>
+        <a class="tbd-menu-item" href="index.html#/seller/settings" onclick="Nav.go('/seller/settings');return false;"><svg><use href="#i-settings"/></svg> Account Settings</a>
+        <a class="tbd-menu-item" href="index.html#/seller/support" onclick="Nav.go('/seller/support');return false;"><svg><use href="#i-help-circle"/></svg> Help &amp; Support</a>
+        <a class="tbd-menu-item danger" href="#" onclick="Auth.logout();return false;"><svg><use href="#i-logout"/></svg> Logout</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+    <div class="dash-body-row">
+      <div class="dash-content" style="max-width:100%;">
+
+        <div class="ads-topline">
+          <div>
+            <div class="breadcrumb"><a href="seller-dashboard.html">Dashboard</a> <svg class="icon icon-sm"><use href="#i-arrow"/></svg> <span>Advertisements</span></div>
+            <h1>Advertisement Center</h1>
+          </div>
+          <button class="btn btn-primary" onclick="AdCenter.openCreateDrawer()">
+            <svg class="icon icon-sm"><use href="#i-plus"/></svg> Create Campaign
+          </button>
+        </div>
+
+        <!-- SUMMARY -->
+        <div class="ad-kpi-grid" id="ad-kpi-grid"></div>
+
+        <!-- CAMPAIGNS TABLE -->
+        <div class="card campaign-card">
+          <div class="campaign-card-head">
+            <h3>Your Campaigns</h3>
+            <div class="chip-row" id="campaign-filter-chips"></div>
+          </div>
+          <div class="table-wrap">
+            <table class="ad-table">
+              <thead><tr>
+                <th>Campaign</th><th>Status</th><th>Budget</th><th>Dates</th>
+                <th>Impressions</th><th>Clicks</th><th>CTR</th><th>Orders</th><th>Revenue</th><th></th>
+              </tr></thead>
+              <tbody id="campaign-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CREATE / EDIT CAMPAIGN DRAWER -->
+    <div class="drawer-backdrop" id="ad-drawer-backdrop" onclick="AdCenter.closeCreateDrawer()"></div>
+    <div class="create-drawer" id="ad-create-drawer" role="dialog" aria-label="Create campaign">
+      <div class="drawer-header">
+        <h3>Create Advertisement Campaign</h3>
+        <button class="icon-btn" onclick="AdCenter.closeCreateDrawer()" aria-label="Close"><svg class="icon"><use href="#i-x"/></svg></button>
+      </div>
+      <div class="drawer-body">
+
+        <div class="campaign-type-row">
+          <div class="campaign-type-opt selected" id="type-opt-store" onclick="AdCenter.setCampaignType('promote_store')">
+            <svg><use href="#i-store-ad"/></svg>
+            <strong>Promote Store</strong>
+            <span>General store banner</span>
+          </div>
+          <div class="campaign-type-opt" id="type-opt-product" onclick="AdCenter.setCampaignType('promote_products')">
+            <svg><use href="#i-box"/></svg>
+            <strong>Promote Product</strong>
+            <span>Feature one product</span>
+          </div>
+        </div>
+
+        <div class="field" data-field="title">
+          <label for="ad-title">Campaign Title</label>
+          <input class="input" id="ad-title" type="text" placeholder="e.g. Festive Sale Banner">
+          <span class="error-msg">Please enter a campaign title.</span>
+        </div>
+
+        <div class="field" id="ad-product-field" style="display:none;" data-field="productId">
+          <label for="ad-product-select">Product to Promote</label>
+          <select class="input" id="ad-product-select"><option value="">Loading your products…</option></select>
+          <span class="error-msg">Please select a product.</span>
+        </div>
+
+        <div class="field">
+          <label>Banner Image</label>
+          <div class="dropzone-sm" id="ad-dropzone">
+            <input type="file" id="ad-banner-input" accept="image/*">
+            <svg class="icon" style="color:var(--green-dark);"><use href="#i-image"/></svg>
+            <span style="font-size:12px;color:var(--ink-soft);">Click or drag a banner image (1200×400px recommended)</span>
+            <img id="ad-banner-preview" style="display:none;">
+          </div>
+        </div>
+
+        <div class="field" data-field="placement">
+          <label for="ad-placement">Placement</label>
+          <select class="input" id="ad-placement">
+            <option value="homepage_banner">Homepage Banner</option>
+            <option value="category_page">Category Page</option>
+            <option value="search_results">Search Results</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <div class="field" data-field="budget">
+            <label for="ad-budget">Campaign Budget (₹)</label>
+            <input class="input" id="ad-budget" type="number" min="0" placeholder="e.g. 5000">
+            <span class="error-msg">Enter a valid budget.</span>
+          </div>
+          <div class="field">
+            <label for="ad-daily-budget">Daily Budget (₹) <span style="font-weight:500;color:var(--ink-soft);">(optional)</span></label>
+            <input class="input" id="ad-daily-budget" type="number" min="0" placeholder="e.g. 500">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field" data-field="startDate">
+            <label for="ad-start-date">Start Date</label>
+            <input class="input" id="ad-start-date" type="date">
+            <span class="error-msg">Pick a start date.</span>
+          </div>
+          <div class="field" data-field="endDate">
+            <label for="ad-end-date">End Date</label>
+            <input class="input" id="ad-end-date" type="date">
+            <span class="error-msg">End date must be after the start date.</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="ad-target-area">Target Area <span style="font-weight:500;color:var(--ink-soft);">(optional)</span></label>
+          <input class="input" id="ad-target-area" type="text" placeholder="Areas to target, comma separated">
+          <span class="hint">Leave blank to target your full delivery radius.</span>
+        </div>
+
+        <div class="field">
+          <label>Target Categories <span style="font-weight:500;color:var(--ink-soft);">(optional)</span></label>
+          <div class="chip-row" id="ad-category-chips"></div>
+        </div>
+
+        <div class="demo-hint">
+          <svg class="icon icon-sm"><use href="#i-info"/></svg>
+          <span>Campaign payment is simulated for now — the campaign is created with your budget on record, ready to connect to a real payment step later.</span>
+        </div>
+
+      </div>
+      <div class="drawer-footer">
+        <button class="btn btn-ghost" onclick="AdCenter.closeCreateDrawer()">Cancel</button>
+        <button class="btn btn-primary" id="ad-submit-btn" onclick="AdCenter.submitCampaign()">Launch Campaign</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+/* ============================================================================
+   NAMMA BAZAR — ADVERTISEMENT CENTER (Phase 3, Module 1)
+   Reads/writes the advertisements + ad_events tables (migration 0013,
+   extended by 0016). Payment for campaign budget is explicitly simulated —
+   the campaign is created with its budget on record so a real payment
+   step (PayU) can be inserted later without changing this page's shape.
+============================================================================ */
+
+const Nav = {
+  go(path){
+    if(path === '/'){ window.location.href = 'index.html'; return; }
+    window.location.href = 'index.html#' + path;
+  }
+};
+function svgUse(id, cls='icon'){ return `<svg class="${cls}"><use href="#${id}"/></svg>`; }
+
+const Toast = {
+  show(msg, icon='i-check'){
+    const stack = document.getElementById('toast-stack');
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `${svgUse(icon)}<span>${msg}</span>`;
+    stack.appendChild(el);
+    setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; el.style.transition='all .25s'; setTimeout(()=>el.remove(),260); }, 2200);
+  }
+};
+
+const SESSION = { profileId:null, storeId:null, storeName:'', ownerName:'', logo:'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=200&auto=format&fit=crop' };
+
+/* ---------- Dropdown / sidebar / auth (shared shell behavior) -------------*/
+const Dropdowns = {
+  toggle(name){
+    const id = 'dd-' + name;
+    const isOpen = document.getElementById(id).classList.contains('open');
+    document.querySelectorAll('.tb-dropdown').forEach(d=>d.classList.remove('open'));
+    if(!isOpen) document.getElementById(id).classList.add('open');
+  },
+  closeAll(){ document.querySelectorAll('.tb-dropdown').forEach(d=>d.classList.remove('open')); }
+};
+document.addEventListener('click', e=>{ if(!e.target.closest('.tb-dropdown-wrap')) Dropdowns.closeAll(); });
+
+const Sidebar = {
+  toggleCollapse(){
+    const sb = document.getElementById('sidebar');
+    sb.classList.toggle('collapsed');
+    document.getElementById('collapse-icon').innerHTML = `<use href="#${sb.classList.contains('collapsed') ? 'i-chevron-right':'i-chevron-left'}"/>`;
+  }
+};
+function openMobileSidebar(){ document.getElementById('sidebar').classList.add('mobile-open'); document.getElementById('sidebar-backdrop').classList.add('open'); }
+function closeMobileSidebar(){ document.getElementById('sidebar').classList.remove('mobile-open'); document.getElementById('sidebar-backdrop').classList.remove('open'); }
+
+const Auth = {
+  async logout(){
+    if(confirm('Log out of your Namma Bazar seller account?')){
+      await supabaseClient.auth.signOut();
+      window.location.href = 'seller-login.html';
+    }
+  }
+};
+
+/* ---------- Reference data -------------------------------------------------*/
+const CATEGORIES = ['Grocery','Vegetables','Fruits','Pharmacy','Electronics','Mobiles','Fashion','Furniture','Beauty','Books','Sports','Pet Supplies','Home Appliances','Bakery','Jewellery','Hardware','Stationery'];
+
+function fileExtension(file){ const p = file.name.split('.'); return p.length>1 ? p.pop().toLowerCase() : 'bin'; }
+
+/* ---------- Advertisement Center controller --------------------------------*/
+const AdCenter = {
+  campaigns: [],
+  categoryMap: {},   // name -> id
+  selectedCategoryIds: new Set(),
+  campaignType: 'promote_store',
+  bannerFile: null,
+  activeFilter: 'all',
+
+  async init(){
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if(!session){ window.location.href = 'seller-login.html'; return; }
+    SESSION.profileId = session.user.id;
+
+    const { data: staffRow, error } = await supabaseClient
+      .from('store_staff').select('stores(id, name, logo_url)')
+      .eq('profile_id', SESSION.profileId).limit(1).maybeSingle();
+    if(error || !staffRow || !staffRow.stores){
+      Toast.show('No store found for this account', 'i-alert');
+      setTimeout(()=> window.location.href = 'seller-login.html', 1500);
+      return;
+    }
+    SESSION.storeId = staffRow.stores.id;
+    SESSION.storeName = staffRow.stores.name;
+    SESSION.logo = staffRow.stores.logo_url || SESSION.logo;
+
+    const { data: profile } = await supabaseClient.from('profiles').select('full_name').eq('id', SESSION.profileId).single();
+    SESSION.ownerName = (profile && profile.full_name) || 'Store Owner';
+
+    document.getElementById('tb-store-logo').src = SESSION.logo;
+    document.getElementById('tb-store-name').textContent = SESSION.storeName;
+    document.getElementById('tb-profile-logo').src = SESSION.logo;
+    document.getElementById('tb-profile-name').textContent = SESSION.ownerName;
+
+    await this.loadCategories();
+    await this.loadProducts();
+    this.renderCategoryChips();
+    this.renderFilterChips();
+    this.bindBannerUpload();
+    await this.loadCampaigns();
+  },
+
+  async loadCategories(){
+    const { data } = await supabaseClient.from('categories').select('id, name').in('name', CATEGORIES);
+    (data || []).forEach(c => this.categoryMap[c.name] = c.id);
+  },
+
+  async loadProducts(){
+    const { data } = await supabaseClient.from('products').select('id, name').eq('store_id', SESSION.storeId).eq('status', 'active').limit(200);
+    const sel = document.getElementById('ad-product-select');
+    sel.innerHTML = data && data.length
+      ? '<option value="">Select a product</option>' + data.map(p => `<option value="${p.id}">${p.name}</option>`).join('')
+      : '<option value="">No active products yet — publish one first</option>';
+  },
+
+  renderCategoryChips(){
+    document.getElementById('ad-category-chips').innerHTML = CATEGORIES.map(name => `
+      <button type="button" class="chip" data-cat="${name}" onclick="AdCenter.toggleCategory('${name}', this)">${name}</button>
+    `).join('');
+  },
+
+  toggleCategory(name, btn){
+    const id = this.categoryMap[name];
+    if(!id) return;
+    if(this.selectedCategoryIds.has(id)){ this.selectedCategoryIds.delete(id); btn.classList.remove('active'); }
+    else { this.selectedCategoryIds.add(id); btn.classList.add('active'); }
+  },
+
+  renderFilterChips(){
+    const filters = [{id:'all',label:'All'},{id:'active',label:'Active'},{id:'pending_review',label:'Pending'},{id:'expired',label:'Expired'},{id:'rejected',label:'Rejected'}];
+    document.getElementById('campaign-filter-chips').innerHTML = filters.map(f => `
+      <button type="button" class="chip ${this.activeFilter===f.id?'active':''}" onclick="AdCenter.setFilter('${f.id}')">${f.label}</button>
+    `).join('');
+  },
+
+  setFilter(id){ this.activeFilter = id; this.renderFilterChips(); this.renderCampaignTable(); },
+
+  setCampaignType(type){
+    this.campaignType = type;
+    document.getElementById('type-opt-store').classList.toggle('selected', type==='promote_store');
+    document.getElementById('type-opt-product').classList.toggle('selected', type==='promote_products');
+    document.getElementById('ad-product-field').style.display = type==='promote_products' ? 'flex' : 'none';
+  },
+
+  bindBannerUpload(){
+    document.getElementById('ad-banner-input').addEventListener('change', e=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      this.bannerFile = file;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = document.getElementById('ad-banner-preview');
+        img.src = ev.target.result;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    });
+  },
+
+  openCreateDrawer(){
+    document.getElementById('ad-drawer-backdrop').classList.add('open');
+    document.getElementById('ad-create-drawer').classList.add('open');
+  },
+  closeCreateDrawer(){
+    document.getElementById('ad-drawer-backdrop').classList.remove('open');
+    document.getElementById('ad-create-drawer').classList.remove('open');
+  },
+
+  setFieldError(key, hasError){
+    const el = document.querySelector(`.field[data-field="${key}"]`);
+    if(el) el.classList.toggle('has-error', hasError);
+  },
+
+  async loadCampaigns(){
+    const { data, error } = await supabaseClient
+      .from('advertisements')
+      .select('id, title, banner_image_url, placement, status, starts_at, expires_at, budget_amount, campaign_type, product_id')
+      .eq('store_id', SESSION.storeId)
+      .order('created_at', { ascending: false });
+
+    if(error){ Toast.show('Could not load campaigns', 'i-x'); return; }
+    this.campaigns = data || [];
+
+    if(this.campaigns.length){
+      const ids = this.campaigns.map(c => c.id);
+      const { data: events } = await supabaseClient.from('ad_events').select('ad_id, event_type, order_id, orders(total_amount)').in('ad_id', ids);
+      this.campaigns.forEach(c => {
+        const evs = (events || []).filter(e => e.ad_id === c.id);
+        c.impressions = evs.filter(e => e.event_type === 'impression').length;
+        c.clicks = evs.filter(e => e.event_type === 'click').length;
+        const conversions = evs.filter(e => e.event_type === 'conversion');
+        c.orders = conversions.length;
+        c.revenue = conversions.reduce((s,e)=> s + (e.orders ? Number(e.orders.total_amount) : 0), 0);
+        c.ctr = c.impressions ? Math.round((c.clicks / c.impressions) * 1000) / 10 : 0;
+      });
+    }
+
+    this.renderKpis();
+    this.renderCampaignTable();
+  },
+
+  renderKpis(){
+    const active = this.campaigns.filter(c=>c.status==='active').length;
+    const pending = this.campaigns.filter(c=>c.status==='pending_review').length;
+    const totals = this.campaigns.reduce((acc,c)=>({
+      impressions: acc.impressions + (c.impressions||0), clicks: acc.clicks + (c.clicks||0),
+      orders: acc.orders + (c.orders||0), revenue: acc.revenue + (c.revenue||0)
+    }), {impressions:0, clicks:0, orders:0, revenue:0});
+    const ctr = totals.impressions ? Math.round((totals.clicks/totals.impressions)*1000)/10 : 0;
+
+    const kpis = [
+      {label:'Active Campaigns', value: active, icon:'i-megaphone', fmt:'int'},
+      {label:'Pending Review', value: pending, icon:'i-clock', fmt:'int'},
+      {label:'Impressions', value: totals.impressions, icon:'i-eye', fmt:'int'},
+      {label:'Clicks', value: totals.clicks, icon:'i-target', fmt:'int'},
+      {label:'CTR', value: ctr, icon:'i-trending-up', fmt:'pct'},
+      {label:'Conversions', value: totals.orders, icon:'i-check', fmt:'int'},
+      {label:'Orders Generated', value: totals.orders, icon:'i-clipboard', fmt:'int'},
+      {label:'Revenue Generated', value: totals.revenue, icon:'i-wallet', fmt:'inr'}
+    ];
+    document.getElementById('ad-kpi-grid').innerHTML = kpis.map((k,i)=>`
+      <div class="card ad-kpi-card">
+        <div class="kpi-ic" style="background:${i%2===0?'var(--green-light)':'var(--orange-light)'};color:${i%2===0?'var(--green-dark)':'var(--orange-dark)'};">${svgUse(k.icon,'icon icon-sm')}</div>
+        <div class="kpi-value">${k.fmt==='inr' ? '₹'+k.value.toLocaleString('en-IN') : k.fmt==='pct' ? k.value+'%' : k.value.toLocaleString('en-IN')}</div>
+        <div class="kpi-label">${k.label}</div>
+      </div>`).join('');
+  },
+
+  statusBadge(status){
+    const label = status.replace(/_/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+    const map = {active:'badge-green', pending_review:'badge-gold', expired:'badge-dark', rejected:'badge-orange'};
+    return `<span class="badge ${map[status]||'badge-dark'}">${label}</span>`;
+  },
+
+  renderCampaignTable(){
+    const rows = this.activeFilter==='all' ? this.campaigns : this.campaigns.filter(c=>c.status===this.activeFilter);
+    const tbody = document.getElementById('campaign-table-body');
+
+    if(!rows.length){
+      tbody.innerHTML = `<tr><td colspan="10"><div class="empty-campaigns">
+        <div class="es-icon">${svgUse('i-megaphone')}</div>
+        <p><strong>No campaigns yet</strong></p>
+        <p style="font-size:13px;margin-top:4px;">Create your first campaign to promote your store or a product.</p>
+      </div></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = rows.map(c => `
+      <tr>
+        <td>
+          <div class="ad-campaign-name">
+            <img class="ad-campaign-thumb" src="${c.banner_image_url}" alt="${c.title}">
+            <div class="meta"><strong>${c.title}</strong><span>${c.campaign_type==='promote_products'?'Product':'Store'} · ${c.placement.replace(/_/g,' ')}</span></div>
+          </div>
+        </td>
+        <td>${this.statusBadge(c.status)}</td>
+        <td class="ad-metric-cell">₹${Number(c.budget_amount||0).toLocaleString('en-IN')}</td>
+        <td style="font-size:12px;color:var(--ink-soft);white-space:nowrap;">${new Date(c.starts_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})} – ${new Date(c.expires_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</td>
+        <td class="ad-metric-cell">${(c.impressions||0).toLocaleString('en-IN')}</td>
+        <td class="ad-metric-cell">${(c.clicks||0).toLocaleString('en-IN')}</td>
+        <td class="ad-metric-cell">${c.ctr||0}%</td>
+        <td class="ad-metric-cell">${c.orders||0}</td>
+        <td class="ad-metric-cell">₹${(c.revenue||0).toLocaleString('en-IN')}</td>
+        <td><div class="ad-actions-cell">${this.actionButtons(c)}</div></td>
+      </tr>`).join('');
+  },
+
+  actionButtons(c){
+    const btn = (icon, title, onclick, danger) => `<button class="icon-action-sm ${danger?'danger':''}" title="${title}" onclick="${onclick}">${svgUse(icon,'icon icon-sm')}</button>`;
+    let buttons = '';
+    if(c.status === 'active') buttons += btn('i-pause','Pause',`AdCenter.pauseCampaign('${c.id}')`);
+    if(c.status === 'pending_review') buttons += btn('i-play-fill','Resume/Activate',`AdCenter.resumeCampaign('${c.id}')`);
+    if(c.status === 'active' || c.status === 'pending_review') buttons += btn('i-stop','Stop',`AdCenter.stopCampaign('${c.id}')`, true);
+    buttons += btn('i-copy','Duplicate',`AdCenter.duplicateCampaign('${c.id}')`);
+    buttons += btn('i-trash','Delete',`AdCenter.deleteCampaign('${c.id}')`, true);
+    return buttons;
+  },
+
+  async pauseCampaign(id){
+    const { error } = await supabaseClient.from('advertisements').update({ status: 'pending_review' }).eq('id', id);
+    if(error){ Toast.show('Could not pause campaign', 'i-x'); return; }
+    Toast.show('Campaign paused', 'i-pause');
+    await this.loadCampaigns();
+  },
+  async resumeCampaign(id){
+    const { error } = await supabaseClient.from('advertisements').update({ status: 'active' }).eq('id', id);
+    if(error){ Toast.show('Could not resume campaign', 'i-x'); return; }
+    Toast.show('Campaign resumed', 'i-check');
+    await this.loadCampaigns();
+  },
+  async stopCampaign(id){
+    if(!confirm('Stop this campaign? It will no longer be shown to customers.')) return;
+    const { error } = await supabaseClient.from('advertisements').update({ status: 'expired', expires_at: new Date().toISOString() }).eq('id', id);
+    if(error){ Toast.show('Could not stop campaign', 'i-x'); return; }
+    Toast.show('Campaign stopped', 'i-stop');
+    await this.loadCampaigns();
+  },
+  async duplicateCampaign(id){
+    const source = this.campaigns.find(c=>c.id===id);
+    if(!source) return;
+    const { error } = await supabaseClient.from('advertisements').insert({
+      store_id: SESSION.storeId, title: source.title + ' (Copy)', banner_image_url: source.banner_image_url,
+      placement: source.placement, campaign_type: source.campaign_type, product_id: source.product_id,
+      budget_amount: source.budget_amount, status: 'pending_review',
+      starts_at: new Date().toISOString(), expires_at: new Date(Date.now() + 7*86400000).toISOString()
+    });
+    if(error){ Toast.show('Could not duplicate campaign', 'i-x'); return; }
+    Toast.show('Campaign duplicated', 'i-copy');
+    await this.loadCampaigns();
+  },
+  async deleteCampaign(id){
+    if(!confirm('Delete this campaign permanently? This cannot be undone.')) return;
+    const { error } = await supabaseClient.from('advertisements').delete().eq('id', id);
+    if(error){ Toast.show('Could not delete campaign', 'i-x'); return; }
+    Toast.show('Campaign deleted', 'i-trash');
+    await this.loadCampaigns();
+  },
+
+  async searchCampaigns(query){
+    query = query.trim().toLowerCase();
+    if(!query){ this.renderCampaignTable(); return; }
+    const filtered = this.campaigns.filter(c => c.title.toLowerCase().includes(query));
+    if(!filtered.length){ Toast.show(`No campaigns matching "${query}"`, 'i-search'); return; }
+    Toast.show(`Found ${filtered.length} campaign${filtered.length===1?'':'s'}`, 'i-search');
+  },
+
+  async submitCampaign(){
+    const title = document.getElementById('ad-title').value.trim();
+    const productId = document.getElementById('ad-product-select').value;
+    const placement = document.getElementById('ad-placement').value;
+    const budget = document.getElementById('ad-budget').value;
+    const dailyBudget = document.getElementById('ad-daily-budget').value;
+    const startDate = document.getElementById('ad-start-date').value;
+    const endDate = document.getElementById('ad-end-date').value;
+    const targetArea = document.getElementById('ad-target-area').value.trim();
+
+    let ok = true;
+    const check = (key, valid) => { this.setFieldError(key, !valid); if(!valid) ok = false; };
+    check('title', title.length > 1);
+    if(this.campaignType === 'promote_products') check('productId', !!productId);
+    check('budget', parseFloat(budget) > 0);
+    check('startDate', !!startDate);
+    check('endDate', !!endDate && (!startDate || new Date(endDate) > new Date(startDate)));
+    if(!ok){ Toast.show('Please complete the required fields', 'i-x'); return; }
+
+    const btn = document.getElementById('ad-submit-btn');
+    btn.disabled = true; btn.textContent = 'Launching…';
+
+    try{
+      let bannerUrl = 'https://images.unsplash.com/photo-1607082350899-7e105aa886ae?q=80&w=800&auto=format&fit=crop';
+      if(this.bannerFile){
+        const path = `${SESSION.storeId}/${Date.now()}-${fileExtension(this.bannerFile)}`;
+        const { error: upErr } = await supabaseClient.storage.from('advertisement-banners').upload(path, this.bannerFile, { upsert: true });
+        if(upErr) throw upErr;
+        const { data: pub } = supabaseClient.storage.from('advertisement-banners').getPublicUrl(path);
+        bannerUrl = pub.publicUrl;
+      }
+
+      const { error } = await supabaseClient.from('advertisements').insert({
+        store_id: SESSION.storeId,
+        title,
+        banner_image_url: bannerUrl,
+        placement,
+        campaign_type: this.campaignType,
+        product_id: this.campaignType === 'promote_products' ? productId : null,
+        budget_amount: parseFloat(budget),
+        daily_budget: dailyBudget ? parseFloat(dailyBudget) : null,
+        target_area: targetArea || null,
+        target_category_ids: this.selectedCategoryIds.size ? Array.from(this.selectedCategoryIds) : null,
+        status: 'pending_review',
+        starts_at: new Date(startDate).toISOString(),
+        expires_at: new Date(endDate).toISOString()
+      });
+      if(error) throw error;
+
+      Toast.show('Campaign created — pending review', 'i-check');
+      this.closeCreateDrawer();
+      await this.loadCampaigns();
+
+    } catch(err){
+      console.error('Create campaign failed:', err);
+      Toast.show(err.message || 'Something went wrong — please try again', 'i-x');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Launch Campaign';
+    }
+  }
+};
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') AdCenter.closeCreateDrawer(); });
+
+AdCenter.init();
+</script>
+</body>
+</html>

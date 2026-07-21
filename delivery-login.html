@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Partner Login — Namma Bazar</title>
+<meta name="description" content="Sign in to your Namma Bazar delivery partner account.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   NAMMA BAZAR — DESIGN TOKENS
+   ============================================================ */
+:root{
+  --green:#16A34A;
+  --green-dark:#0F7A38;
+  --green-light:#E8F6EC;
+  --orange:#F97316;
+  --orange-dark:#DC5F0A;
+  --orange-light:#FFEEE0;
+  --ink:#14231C;
+  --ink-soft:#4B5A52;
+  --mist:#F4F7F5;
+  --mist-deep:#EAF0EC;
+  --line:#E3E9E5;
+  --white:#FFFFFF;
+  --gold:#F5B301;
+
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --radius-pill:999px;
+
+  --shadow-sm:0 2px 8px rgba(20,35,28,0.06);
+  --shadow-md:0 8px 24px rgba(20,35,28,0.10);
+  --shadow-lg:0 20px 48px rgba(20,35,28,0.16);
+
+  --header-h:72px;
+  --nav-h:48px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--white);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input{font-family:inherit;}
+ul{list-style:none;}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);}
+.mono{font-family:var(--font-mono);}
+:focus-visible{outline:2.5px solid var(--green-dark);outline-offset:2px;border-radius:4px;}
+
+.container{max-width:1320px;margin:0 auto;padding:0 24px;}
+.section{padding:72px 0;}
+@media(max-width:768px){.section{padding:48px 0;}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:12px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;color:var(--green-dark);
+  margin-bottom:10px;
+}
+.eyebrow::before{content:'';width:18px;height:3px;background:linear-gradient(90deg,var(--green),var(--orange));border-radius:2px;}
+
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:32px;flex-wrap:wrap;}
+.section-head h2{font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-0.02em;}
+.section-head p{color:var(--ink-soft);margin-top:6px;font-size:15px;max-width:520px;}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-body);font-weight:600;font-size:15px;
+  padding:13px 24px;border-radius:var(--radius-pill);
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--green);color:var(--white);box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--green-dark);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.btn-accent{background:var(--orange);color:var(--white);box-shadow:var(--shadow-sm);}
+.btn-accent:hover{background:var(--orange-dark);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.btn-ghost{background:var(--white);color:var(--ink);border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--green);color:var(--green-dark);transform:translateY(-2px);}
+.btn-outline-white{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,0.55);}
+.btn-outline-white:hover{background:rgba(255,255,255,0.15);border-color:#fff;}
+.btn-sm{padding:9px 16px;font-size:13px;}
+.btn-block{width:100%;}
+.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
+.icon-sm{width:16px;height:16px;}
+
+.card{background:var(--white);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);border:1px solid var(--line);transition:transform .2s ease, box-shadow .2s ease;}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 9px;border-radius:var(--radius-pill);letter-spacing:0.02em;}
+.badge-green{background:var(--green-light);color:var(--green-dark);}
+.badge-orange{background:var(--orange-light);color:var(--orange-dark);}
+.badge-gold{background:#FFF7DC;color:#8A6300;}
+.badge-dark{background:var(--ink);color:var(--white);}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease;}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+.scroller{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:8px;-webkit-overflow-scrolling:touch;}
+.scroller::-webkit-scrollbar{height:6px;}
+.scroller::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+.scroller>*{scroll-snap-align:start;flex-shrink:0;}
+
+
+
+/* ============================================================
+   LOGIN PAGE HERO / BREADCRUMB
+   ============================================================ */
+.login-top{padding:28px 0 0;}
+.login-top .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft);}
+.login-top .breadcrumb a:hover{color:var(--green-dark);}
+
+/* ============================================================
+   SHELL — sidebar + form
+   ============================================================ */
+.login-shell{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:1100px;margin:24px auto 80px;
+  border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid var(--line);
+}
+.login-aside{
+  background:linear-gradient(150deg,#0F7A38 0%,#16A34A 55%,#0d6b3f 100%);color:#fff;padding:48px 42px;
+  display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;
+}
+.login-aside::after{content:'';position:absolute;right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,0.32),transparent 70%);}
+.login-aside::before{content:'';position:absolute;left:-90px;bottom:-90px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.12),transparent 70%);}
+.login-aside .la-badge{
+  display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.25);
+  padding:6px 14px;border-radius:var(--radius-pill);font-size:12px;font-weight:700;margin-bottom:20px;width:fit-content;position:relative;z-index:1;
+}
+.login-aside h2{color:#fff;font-size:26px;font-weight:800;line-height:1.2;margin-bottom:10px;position:relative;z-index:1;}
+.login-aside > p{color:rgba(255,255,255,0.78);font-size:14px;margin-bottom:30px;max-width:360px;position:relative;z-index:1;}
+.la-feature-list{display:flex;flex-direction:column;gap:18px;position:relative;z-index:1;}
+.la-feature{display:flex;align-items:flex-start;gap:14px;}
+.la-feature .lf-ic{
+  width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.la-feature .lf-ic svg{width:19px;height:19px;color:#fff;}
+.la-feature strong{display:block;font-size:14px;color:#fff;margin-bottom:2px;}
+.la-feature span{font-size:12.5px;color:rgba(255,255,255,0.72);}
+
+.login-panel{padding:44px 42px;display:flex;flex-direction:column;justify-content:center;background:#fff;}
+.login-panel .lp-head{margin-bottom:26px;}
+.login-panel .lp-head h1{font-size:25px;font-weight:800;margin-bottom:6px;}
+.login-panel .lp-head p{color:var(--ink-soft);font-size:13.5px;}
+
+@media(max-width:880px){
+  .login-shell{grid-template-columns:1fr;max-width:520px;box-shadow:none;border:none;}
+  .login-aside{display:none;}
+  .login-panel{padding:8px 4px 40px;}
+}
+
+/* ============================================================
+   AUTH VIEWS (shared across login / forgot / otp / new-password / success)
+   ============================================================ */
+.auth-view{display:none;}
+.auth-view.active{display:block;animation:authFade .3s ease;}
+@keyframes authFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;}
+.field label{font-size:13px;font-weight:700;color:var(--ink);}
+.field .hint{font-size:11.5px;color:var(--ink-soft);}
+.field .error-msg{font-size:11.5px;color:var(--orange-dark);font-weight:600;display:none;}
+.field.has-error .error-msg{display:block;}
+.field.has-error input{border-color:var(--orange);}
+
+.input,input.input{
+  width:100%;padding:13px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--line);font-size:14.5px;
+  font-family:var(--font-body);color:var(--ink);background:#fff;transition:border-color .18s,box-shadow .18s;
+}
+.input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(22,163,74,0.1);}
+.input-with-icon{position:relative;}
+.input-with-icon .input{padding-right:44px;}
+.input-icon-btn{position:absolute;right:6px;top:6px;bottom:6px;width:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);}
+.input-icon-btn:hover{background:var(--mist);color:var(--green-dark);}
+
+.pw-meter{display:flex;gap:4px;margin-top:2px;}
+.pw-meter span{height:4px;flex:1;border-radius:3px;background:var(--line);transition:background .2s;}
+
+.row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
+.remember-check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);font-weight:600;}
+.remember-check input{width:16px;height:16px;accent-color:var(--green);}
+.link-btn{font-size:13px;font-weight:700;color:var(--green-dark);}
+.link-btn:hover{text-decoration:underline;}
+
+.auth-error-banner{
+  display:none;align-items:center;gap:10px;background:var(--orange-light);color:var(--orange-dark);
+  padding:12px 14px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;margin-bottom:18px;
+}
+.auth-error-banner.show{display:flex;}
+.auth-error-banner svg{width:18px;height:18px;flex-shrink:0;}
+
+.btn-loading .btn-label{display:none;}
+.btn-loading .btn-spinner{display:inline-flex !important;}
+.btn-spinner{
+  display:none;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.4);
+  border-top-color:#fff;animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.divider-row{display:flex;align-items:center;gap:12px;margin:22px 0;}
+.divider-row .line{flex:1;height:1px;background:var(--line);}
+.divider-row span{font-size:12px;color:var(--ink-soft);font-weight:600;white-space:nowrap;}
+
+.social-row{display:flex;flex-direction:column;gap:10px;}
+.social-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--line);font-weight:700;font-size:13.5px;color:var(--ink);transition:border-color .18s,background .18s;
+}
+.social-btn:hover{border-color:var(--green);background:var(--mist);}
+.social-btn svg{width:19px;height:19px;}
+
+.demo-hint{
+  margin-top:18px;font-size:11.5px;color:var(--ink-soft);background:var(--mist);border-radius:10px;padding:10px 12px;
+  display:flex;gap:8px;align-items:flex-start;
+}
+.demo-hint svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;color:var(--green-dark);}
+
+/* ============================================================
+   OTP SCREEN
+   ============================================================ */
+.otp-target{font-weight:700;color:var(--ink);}
+.otp-row{display:flex;gap:10px;margin:22px 0 8px;}
+.otp-box{
+  width:100%;aspect-ratio:1;text-align:center;font-size:22px;font-weight:700;font-family:var(--font-mono);
+  border:1.5px solid var(--line);border-radius:var(--radius-sm);color:var(--ink);
+}
+.otp-box:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(22,163,74,0.1);}
+.otp-box.filled{border-color:var(--green);background:var(--green-light);}
+.otp-resend-row{display:flex;align-items:center;justify-content:space-between;margin:8px 0 24px;font-size:13px;}
+.otp-timer{color:var(--ink-soft);font-family:var(--font-mono);}
+
+/* ============================================================
+   SUCCESS SCREENS (password updated / login success)
+   ============================================================ */
+.as-center{text-align:center;padding:12px 0;}
+.as-icon{
+  width:76px;height:76px;border-radius:50%;background:var(--green-light);color:var(--green-dark);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;
+}
+.as-icon svg{width:36px;height:36px;}
+.as-icon::after{content:'';position:absolute;inset:-7px;border-radius:50%;border:2px solid var(--green-light);animation:pulseRing2 2s ease-out infinite;}
+@keyframes pulseRing2{0%{transform:scale(0.85);opacity:1;}100%{transform:scale(1.25);opacity:0;}}
+.as-center h2{font-size:22px;margin-bottom:8px;}
+.as-center p{color:var(--ink-soft);font-size:14px;margin-bottom:26px;}
+
+.store-welcome-card{
+  display:flex;align-items:center;gap:14px;background:var(--mist);border-radius:var(--radius-md);padding:16px;margin:22px 0 28px;text-align:left;
+}
+.store-welcome-card img{width:56px;height:56px;border-radius:14px;object-fit:cover;border:2px solid #fff;box-shadow:var(--shadow-sm);}
+.store-welcome-card .swc-text strong{display:block;font-size:15.5px;}
+.store-welcome-card .swc-text span{font-size:12.5px;color:var(--ink-soft);}
+.store-welcome-card .swc-badge{margin-left:auto;}
+
+@media(max-width:520px){
+  .login-panel{padding:4px;}
+  .otp-box{font-size:18px;}
+}
+
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute">
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 8.6c0 4.9-8.8 10.1-8.8 10.1S3.2 13.5 3.2 8.6a4.9 4.9 0 0 1 8.8-3 4.9 4.9 0 0 1 8.8 3Z"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6.5 8-6.5s6.5 2 8 6.5"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11H3z"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l3 6.2 6.8.9-5 4.8 1.2 6.8L12 17.9 5.9 21.2l1.2-6.8-5-4.8 6.8-.9Z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 12l-8 8-9-9V3h8Z"/><circle cx="7" cy="7" r="1.4"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 8h11v9H2z"/><path d="M13 11h4l4 4v2h-8z"/><circle cx="6.5" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2l8 3.5v6c0 5-3.4 8.5-8 10.5-4.6-2-8-5.5-8-10.5v-6Z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-return" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/></symbol>
+<symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="5" height="7" rx="2"/><rect x="16.5" y="13" width="5" height="7" rx="2"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5.5-5.5L4 20"/></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24"><path d="M16.3 2.3c.2 1.2-.3 2.4-1 3.2-.8.9-2 1.6-3.2 1.5-.2-1.2.4-2.4 1.1-3.2.8-.9 2.1-1.5 3.1-1.5ZM19.8 17c-.6 1.4-.9 2-1.7 3.2-1.1 1.7-2.6 3.8-4.5 3.8-1.7 0-2.1-1.1-4.4-1.1-2.3 0-2.8 1.1-4.5 1.1-1.9 0-3.3-1.9-4.4-3.6C-1.6 16.6-.7 10 3 10c1.7 0 2.9 1.2 4.4 1.2 1.4 0 2.4-1.2 4.5-1.2 1.4 0 3.6.6 5 2.6-4.4 2.4-3.7 8.4 2.9 4.4Z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></symbol>
+<symbol id="i-fb" viewBox="0 0 24 24"><path d="M14 9h3V5h-3a4 4 0 0 0-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9a1 1 0 0 1 1-1Z"/></symbol>
+<symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></symbol>
+<symbol id="i-tw" viewBox="0 0 24 24"><path d="M22 5.9c-.7.3-1.5.6-2.3.7a4 4 0 0 0 1.8-2.2 8 8 0 0 1-2.5 1 4 4 0 0 0-6.9 3.6A11.4 11.4 0 0 1 3.8 4.6a4 4 0 0 0 1.3 5.3 4 4 0 0 1-1.8-.5v.1a4 4 0 0 0 3.2 3.9 4 4 0 0 1-1.8.1 4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 17.6a11.3 11.3 0 0 0 6.1 1.8c7.3 0 11.3-6 11.3-11.3v-.5A8 8 0 0 0 22 5.9Z"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+<symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.9 10.9 0 0 1 12 5c7 0 10.5 7 10.5 7a13.4 13.4 0 0 1-3 3.9M6.5 6.6C3.6 8.5 1.5 12 1.5 12S5 19 12 19a10.6 10.6 0 0 0 3.3-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+<symbol id="i-google" viewBox="0 0 24 24"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.4a4.6 4.6 0 0 1-2 3v2.4h3.2c1.9-1.7 3-4.3 3-7.3Z"/><path d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22Z"/><path d="M6.4 14a6 6 0 0 1 0-4v-2.5H3.1a10 10 0 0 0 0 9l3.3-2.5Z"/><path d="M12 5.8c1.5 0 2.8.5 3.8 1.5l2.8-2.8A10 10 0 0 0 3.1 7.5l3.3 2.5C7.2 7.6 9.4 5.8 12 5.8Z"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 1 21h22Z"/><path d="M12 9v5"/><circle cx="12" cy="17.3" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="8" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v3"/><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="16.5" cy="13.5" r="1.4"/></symbol>
+</svg>
+
+<div id="toast-stack"></div>
+
+<div id="toast-stack"></div>
+
+<!-- ============================================================
+     TOP ALERT
+============================================================= -->
+<div id="top-alert">🚚 Same Day Delivery is live in your area — <b>Shop before 6 PM</b> for delivery today</div>
+
+<!-- ============================================================
+     HEADER
+============================================================= -->
+<header class="site-header">
+  <div class="container">
+    <div class="header-row">
+      <a href="index.html" class="logo" aria-label="Namma Bazar home">
+        <div class="logo-mark"><svg class="icon" style="color:#fff"><use href="#i-store"/></svg></div>
+        <div class="logo-text">
+          <span class="name">Namma Bazar</span>
+          <span class="kn">ನಮ್ಮ ಬಜಾರ್ · Shop Local. Get It Today.</span>
+        </div>
+      </a>
+
+      <button class="loc-select desktop-only" onclick="Nav.go('/change-location')">
+        <svg class="icon icon-sm"><use href="#i-pin"/></svg>
+        <span class="lbl"><small>Deliver to</small><strong id="loc-label">Sagar, Karnataka</strong></span>
+      </button>
+
+      <div class="search-wrap desktop-only" style="display:flex;">
+        <div class="search-bar">
+          <svg class="icon"><use href="#i-search"/></svg>
+          <input id="search-input" type="text" placeholder="Search products, stores, categories, brands..." autocomplete="off" aria-label="Search Namma Bazar">
+          <button class="search-go" aria-label="Search" onclick="Search.submit()">
+            <svg class="icon icon-sm" style="color:#fff"><use href="#i-arrow"/></svg>
+          </button>
+        </div>
+        <div class="search-suggest" id="search-suggest"></div>
+      </div>
+
+      <div class="header-actions">
+        <a href="#/wishlist" class="icon-btn desktop-only" onclick="Nav.go('/wishlist');return false;" aria-label="Wishlist">
+          <svg class="icon"><use href="#i-heart"/></svg>
+          <span class="count" id="wishlist-count">0</span>
+        </a>
+        <a href="#/cart" class="icon-btn" onclick="Nav.go('/cart');return false;" aria-label="Cart">
+          <svg class="icon"><use href="#i-cart"/></svg>
+          <span class="count" id="cart-count">0</span>
+        </a>
+        <a href="#/notifications" class="icon-btn desktop-only" onclick="Nav.go('/notifications');return false;" aria-label="Notifications">
+          <svg class="icon"><use href="#i-bell"/></svg>
+          <span class="count">3</span>
+        </a>
+        <div class="hdr-divider desktop-only"></div>
+        <a href="#/login" class="hdr-textlink desktop-only" onclick="Nav.go('/login');return false;">Login</a>
+        <a href="register.html" class="btn btn-ghost btn-sm desktop-only">
+          <svg class="icon icon-sm"><use href="#i-store"/></svg> Become Seller
+        </a>
+        <a href="#/app" class="btn btn-primary btn-sm desktop-only" onclick="Nav.go('/app');return false;">Download App</a>
+        <button class="icon-btn mobile-only" style="display:none" onclick="toggleMobileMenu()" aria-label="Menu">
+          <svg class="icon"><use href="#i-menu"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="subnav desktop-only" style="display:block" aria-label="Primary">
+    <div class="container">
+      <div class="subnav-row">
+        <a href="index.html">Home</a>
+        <a href="#/categories" onclick="Nav.go('/categories');return false;">Categories</a>
+        <a href="stores.html">Stores</a>
+        <a href="#/offers" onclick="Nav.go('/offers');return false;">Offers</a>
+        <a href="#/advertisements" onclick="Nav.go('/advertisements');return false;">Advertisements</a>
+        <a href="register.html">Become Seller</a>
+        <a href="#/track-order" onclick="Nav.go('/track-order');return false;">Track Order</a>
+        <a href="#/contact" onclick="Nav.go('/contact');return false;">Contact</a>
+        <a href="#/support" onclick="Nav.go('/support');return false;">Support</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- mobile search -->
+  <div class="container mobile-only" style="display:none;padding:0 16px 12px;">
+    <div class="search-wrap" style="width:100%;">
+      <div class="search-bar">
+        <svg class="icon"><use href="#i-search"/></svg>
+        <input id="search-input-m" type="text" placeholder="Search Namma Bazar" autocomplete="off" aria-label="Search Namma Bazar">
+        <button class="search-go" aria-label="Search" onclick="Search.submit(true)"><svg class="icon icon-sm" style="color:#fff"><use href="#i-arrow"/></svg></button>
+      </div>
+      <div class="search-suggest" id="search-suggest-m"></div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <div class="container login-top">
+    <div class="breadcrumb"><a href="index.html">Home</a> <svg class="icon icon-sm"><use href="#i-arrow"/></svg> <span>Delivery Partner Login</span></div>
+  </div>
+
+  <div class="container">
+    <div class="login-shell">
+
+      <aside class="login-aside">
+        <span class="la-badge"><svg class="icon icon-sm"><use href="#i-truck"/></svg> Namma Bazar for Delivery Partners</span>
+        <h2>Deliver nearby. Earn daily.</h2>
+        <p>Pick up orders from local stores in Sagar and deliver them the same day. Work when you want, track what you earn.</p>
+        <div class="la-feature-list">
+          <div class="la-feature"><div class="lf-ic"><svg><use href="#i-bolt"/></svg></div><div><strong>Go Online Anytime</strong><span>Toggle your availability whenever it suits you.</span></div></div>
+          <div class="la-feature"><div class="lf-ic"><svg><use href="#i-pin"/></svg></div><div><strong>Short Local Trips</strong><span>Hyperlocal deliveries, not long-distance runs.</span></div></div>
+          <div class="la-feature"><div class="lf-ic"><svg><use href="#i-wallet"/></svg></div><div><strong>Transparent Earnings</strong><span>See exactly what every delivery paid you.</span></div></div>
+          <div class="la-feature"><div class="lf-ic"><svg><use href="#i-bell"/></svg></div><div><strong>Live Order Alerts</strong><span>Get notified the moment an order is offered.</span></div></div>
+        </div>
+      </aside>
+
+      <div class="login-panel">
+
+        <!-- VIEW: LOGIN -->
+        <section class="auth-view active" id="view-login">
+          <div class="lp-head">
+            <h1>Delivery Partner Login</h1>
+            <p>Sign in to see orders available near you.</p>
+          </div>
+
+          <div class="auth-error-banner" id="login-error-banner">
+            <svg><use href="#i-alert"/></svg>
+            <span id="login-error-text">Invalid credentials. Please check and try again.</span>
+          </div>
+
+          <form onsubmit="return DPAuth.login(event)" novalidate>
+            <div class="field">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required>
+              <span class="field-error" id="err-login-email">Enter a valid email address</span>
+            </div>
+            <div class="field">
+              <label for="login-password">Password</label>
+              <div class="pw-wrap">
+                <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required>
+                <button type="button" class="pw-toggle" onclick="DPAuth.togglePw('login-password', this)" aria-label="Show password">
+                  <svg class="icon icon-sm"><use href="#i-eye"/></svg>
+                </button>
+              </div>
+              <span class="field-error" id="err-login-password">Password is required</span>
+            </div>
+            <div class="auth-row">
+              <label class="checkbox-row"><input type="checkbox" id="login-remember"> <span>Keep me signed in</span></label>
+              <button type="button" class="link-btn" onclick="DPAuth.showView('forgot')">Forgot password?</button>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="login-submit">Sign In</button>
+          </form>
+
+          <p class="auth-foot">New delivery partner? <a href="delivery-register.html">Apply to join</a></p>
+        </section>
+
+        <!-- VIEW: FORGOT PASSWORD -->
+        <section class="auth-view" id="view-forgot">
+          <div class="lp-head">
+            <h1>Reset your password</h1>
+            <p>We will email you a link to set a new password.</p>
+          </div>
+          <form onsubmit="return DPAuth.sendReset(event)" novalidate>
+            <div class="field">
+              <label for="forgot-email">Email Address</label>
+              <input type="email" id="forgot-email" placeholder="you@example.com" required>
+              <span class="field-error" id="err-forgot-email">Enter a valid email address</span>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="forgot-submit">Send Reset Link</button>
+          </form>
+          <p class="auth-foot"><button type="button" class="link-btn" onclick="DPAuth.showView('login')">Back to sign in</button></p>
+        </section>
+
+        <!-- VIEW: RESET SENT -->
+        <section class="auth-view" id="view-sent">
+          <div class="auth-success">
+            <div class="as-ic"><svg><use href="#i-check"/></svg></div>
+            <h1>Check your email</h1>
+            <p>If an account exists for that address, a password reset link is on its way.</p>
+            <button type="button" class="btn btn-primary btn-block" onclick="DPAuth.showView('login')">Back to Sign In</button>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================= -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <div class="logo-mark"><svg class="icon" style="color:#fff"><use href="#i-store"/></svg></div>
+          <div class="logo-text"><span class="name">Namma Bazar</span><span class="kn">Shop Local. Get It Today.</span></div>
+        </a>
+        <p>A hyperlocal marketplace connecting you with verified stores near you — delivered the same day, every day.</p>
+        <div class="social-row">
+          <a href="#/social/facebook" onclick="Nav.go('/social/facebook');return false;" aria-label="Facebook"><svg class="icon icon-sm"><use href="#i-fb"/></svg></a>
+          <a href="#/social/instagram" onclick="Nav.go('/social/instagram');return false;" aria-label="Instagram"><svg class="icon icon-sm"><use href="#i-ig"/></svg></a>
+          <a href="#/social/twitter" onclick="Nav.go('/social/twitter');return false;" aria-label="Twitter"><svg class="icon icon-sm"><use href="#i-tw"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#/categories" onclick="Nav.go('/categories');return false;">Categories</a></li>
+          <li><a href="stores.html">Stores</a></li>
+          <li><a href="#/offers" onclick="Nav.go('/offers');return false;">Offers</a></li>
+          <li><a href="#/track-order" onclick="Nav.go('/track-order');return false;">Track Order</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Seller Links</h4>
+        <ul>
+          <li><a href="register.html">Become a Seller</a></li>
+          <li><a href="seller-login.html">Seller Login</a></li>
+          <li><a href="#/seller/dashboard" onclick="Nav.go('/seller/dashboard');return false;">Store Dashboard</a></li>
+          <li><a href="#/seller/products/new" onclick="Nav.go('/seller/products/new');return false;">Add Product</a></li>
+          <li><a href="#/advertise" onclick="Nav.go('/advertise');return false;">Advertise With Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Customer Support</h4>
+        <ul>
+          <li><a href="#/contact" onclick="Nav.go('/contact');return false;">Contact Us</a></li>
+          <li><a href="#/support" onclick="Nav.go('/support');return false;">Help Center</a></li>
+          <li><a href="#/track-order" onclick="Nav.go('/track-order');return false;">Track Order</a></li>
+          <li><a href="#/returns" onclick="Nav.go('/returns');return false;">Return Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#/privacy" onclick="Nav.go('/privacy');return false;">Privacy Policy</a></li>
+          <li><a href="#/terms" onclick="Nav.go('/terms');return false;">Terms of Service</a></li>
+          <li><a href="#/shipping-policy" onclick="Nav.go('/shipping-policy');return false;">Shipping Policy</a></li>
+          <li><a href="#/returns" onclick="Nav.go('/returns');return false;">Return Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Namma Bazar. All rights reserved.</span>
+      <div class="legal">
+        <a href="#/app" onclick="Nav.go('/app');return false;">Download App</a>
+        <a href="#/privacy" onclick="Nav.go('/privacy');return false;">Privacy</a>
+        <a href="#/terms" onclick="Nav.go('/terms');return false;">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     MOBILE BOTTOM NAV
+============================================================= -->
+<nav class="bottom-nav" aria-label="Mobile primary">
+  <div class="bottom-nav-row">
+    <a href="index.html" class="bn-item" data-route="/"><svg class="icon"><use href="#i-home"/></svg><span>Home</span></a>
+    <a href="#/categories" class="bn-item" data-route="/categories" onclick="Nav.go('/categories');return false;"><svg class="icon"><use href="#i-grid"/></svg><span>Categories</span></a>
+    <a href="#/search" class="bn-item" data-route="/search" onclick="Nav.go('/search');return false;"><svg class="icon"><use href="#i-search"/></svg><span>Search</span></a>
+    <a href="stores.html" class="bn-item" data-route="/stores"><svg class="icon"><use href="#i-store"/></svg><span>Stores</span></a>
+    <a href="#/wishlist" class="bn-item" data-route="/wishlist" onclick="Nav.go('/wishlist');return false;">
+      <svg class="icon"><use href="#i-heart"/></svg><span class="count" id="wishlist-count-m" style="display:none">0</span><span>Wishlist</span>
+    </a>
+    <a href="#/cart" class="bn-item" data-route="/cart" onclick="Nav.go('/cart');return false;">
+      <svg class="icon"><use href="#i-cart"/></svg><span class="count" id="cart-count-m" style="display:none">0</span><span>Cart</span>
+    </a>
+    <a href="#/profile" class="bn-item" data-route="/profile" onclick="Nav.go('/profile');return false;"><svg class="icon"><use href="#i-user"/></svg><span>Profile</span></a>
+  </div>
+</nav>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+function svgUse(id, cls='icon'){ return `<svg class="${cls}"><use href="#${id}"/></svg>`; }
+
+const Toast = {
+  show(msg, icon='i-check'){
+    let stack = document.getElementById('toast-stack');
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `${svgUse(icon)}<span>${msg}</span>`;
+    stack.appendChild(el);
+    setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; el.style.transition='all .25s'; setTimeout(()=>el.remove(),260); }, 2600);
+  }
+};
+
+const DPAuth = {
+  showView(name){
+    document.querySelectorAll('.auth-view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.getElementById('login-error-banner').classList.remove('show');
+  },
+
+  togglePw(id, btn){
+    const input = document.getElementById(id);
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+  },
+
+  showError(message){
+    document.getElementById('login-error-text').textContent = message;
+    document.getElementById('login-error-banner').classList.add('show');
+  },
+
+  async login(e){
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btn = document.getElementById('login-submit');
+
+    document.getElementById('login-error-banner').classList.remove('show');
+    if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ document.getElementById('err-login-email').classList.add('show'); return false; }
+    document.getElementById('err-login-email').classList.remove('show');
+    if(!password){ document.getElementById('err-login-password').classList.add('show'); return false; }
+    document.getElementById('err-login-password').classList.remove('show');
+
+    btn.disabled = true; btn.textContent = 'Signing in...';
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if(error){
+      btn.disabled = false; btn.textContent = 'Sign In';
+      this.showError('Those credentials did not match an account.');
+      return false;
+    }
+
+    // Confirm this account is actually a delivery partner, and check approval state.
+    const { data: partner } = await supabaseClient
+      .from('delivery_partners')
+      .select('id, documents_status')
+      .eq('profile_id', data.user.id)
+      .maybeSingle();
+
+    if(!partner){
+      await supabaseClient.auth.signOut();
+      btn.disabled = false; btn.textContent = 'Sign In';
+      this.showError('This account is not registered as a delivery partner.');
+      return false;
+    }
+
+    if(partner.documents_status === 'rejected'){
+      await supabaseClient.auth.signOut();
+      btn.disabled = false; btn.textContent = 'Sign In';
+      this.showError('Your application was not approved. Please contact support.');
+      return false;
+    }
+
+    if(partner.documents_status === 'pending'){
+      // Not blocked from signing in — the dashboard shows a clear pending state
+      // rather than pretending the account is fully active.
+      Toast.show('Your application is still under review', 'i-clock');
+    }
+
+    window.location.href = 'delivery-dashboard.html';
+    return false;
+  },
+
+  async sendReset(e){
+    e.preventDefault();
+    const email = document.getElementById('forgot-email').value.trim();
+    const btn = document.getElementById('forgot-submit');
+    if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ document.getElementById('err-forgot-email').classList.add('show'); return false; }
+    document.getElementById('err-forgot-email').classList.remove('show');
+
+    btn.disabled = true; btn.textContent = 'Sending...';
+    await supabaseClient.auth.resetPasswordForEmail(email);
+    btn.disabled = false; btn.textContent = 'Send Reset Link';
+    this.showView('sent');
+    return false;
+  }
+};
+
+// If already signed in as a delivery partner, skip the form.
+(async function(){
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if(session){
+    const { data: partner } = await supabaseClient
+      .from('delivery_partners').select('id').eq('profile_id', session.user.id).maybeSingle();
+    if(partner) window.location.href = 'delivery-dashboard.html';
+  }
+})();
+</script>
+
+</body>
+</html>

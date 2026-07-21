@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Deliveries — Namma Bazar Delivery</title>
+<meta name="description" content="Your active delivery, history, and activity log.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   NAMMA BAZAR — DESIGN TOKENS
+   ============================================================ */
+:root{
+  --green:#16A34A;
+  --green-dark:#0F7A38;
+  --green-light:#E8F6EC;
+  --orange:#F97316;
+  --orange-dark:#DC5F0A;
+  --orange-light:#FFEEE0;
+  --ink:#14231C;
+  --ink-soft:#4B5A52;
+  --mist:#F4F7F5;
+  --mist-deep:#EAF0EC;
+  --line:#E3E9E5;
+  --white:#FFFFFF;
+  --gold:#F5B301;
+
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --radius-pill:999px;
+
+  --shadow-sm:0 2px 8px rgba(20,35,28,0.06);
+  --shadow-md:0 8px 24px rgba(20,35,28,0.10);
+  --shadow-lg:0 20px 48px rgba(20,35,28,0.16);
+
+  --header-h:72px;
+  --nav-h:48px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+}
+body{
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--white);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+input{font-family:inherit;}
+ul{list-style:none;}
+h1,h2,h3,h4{font-family:var(--font-display);color:var(--ink);}
+.mono{font-family:var(--font-mono);}
+:focus-visible{outline:2.5px solid var(--green-dark);outline-offset:2px;border-radius:4px;}
+
+.container{max-width:1320px;margin:0 auto;padding:0 24px;}
+.section{padding:72px 0;}
+@media(max-width:768px){.section{padding:48px 0;}}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-mono);font-size:12px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;color:var(--green-dark);
+  margin-bottom:10px;
+}
+.eyebrow::before{content:'';width:18px;height:3px;background:linear-gradient(90deg,var(--green),var(--orange));border-radius:2px;}
+
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:32px;flex-wrap:wrap;}
+.section-head h2{font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-0.02em;}
+.section-head p{color:var(--ink-soft);margin-top:6px;font-size:15px;max-width:520px;}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-body);font-weight:600;font-size:15px;
+  padding:13px 24px;border-radius:var(--radius-pill);
+  transition:transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{background:var(--green);color:var(--white);box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--green-dark);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.btn-accent{background:var(--orange);color:var(--white);box-shadow:var(--shadow-sm);}
+.btn-accent:hover{background:var(--orange-dark);box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.btn-ghost{background:var(--white);color:var(--ink);border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--green);color:var(--green-dark);transform:translateY(-2px);}
+.btn-outline-white{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,0.55);}
+.btn-outline-white:hover{background:rgba(255,255,255,0.15);border-color:#fff;}
+.btn-sm{padding:9px 16px;font-size:13px;}
+.btn-block{width:100%;}
+.icon{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
+.icon-sm{width:16px;height:16px;}
+
+.card{background:var(--white);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);border:1px solid var(--line);transition:transform .2s ease, box-shadow .2s ease;}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:4px 9px;border-radius:var(--radius-pill);letter-spacing:0.02em;}
+.badge-green{background:var(--green-light);color:var(--green-dark);}
+.badge-orange{background:var(--orange-light);color:var(--orange-dark);}
+.badge-gold{background:#FFF7DC;color:#8A6300;}
+.badge-dark{background:var(--ink);color:var(--white);}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease, transform .6s ease;}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+.scroller{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:8px;-webkit-overflow-scrolling:touch;}
+.scroller::-webkit-scrollbar{height:6px;}
+.scroller::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+.scroller>*{scroll-snap-align:start;flex-shrink:0;}
+
+
+
+/* ============================================================
+   DASHBOARD SHELL
+   ============================================================ */
+html,body{height:100%;}
+body.dash-body-tag{background:var(--mist);}
+.dash-shell{display:flex;min-height:100vh;}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  width:264px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;transition:width .22s ease;z-index:60;
+}
+.sidebar::-webkit-scrollbar{width:5px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
+.sidebar.collapsed{width:80px;}
+.sb-head{display:flex;align-items:center;gap:10px;padding:18px 18px;border-bottom:1px solid var(--line);height:var(--header-h);}
+.sb-head .logo-text{overflow:hidden;white-space:nowrap;transition:opacity .18s;}
+.sidebar.collapsed .sb-head .logo-text{opacity:0;width:0;}
+.sb-collapse-btn{
+  margin-left:auto;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-soft);flex-shrink:0;
+}
+.sb-collapse-btn:hover{background:var(--mist);color:var(--green-dark);}
+.sidebar.collapsed .sb-collapse-btn{margin-left:0;}
+
+.sb-section{padding:16px 14px 6px;}
+.sb-section-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);padding:0 10px 8px;}
+.sidebar.collapsed .sb-section-label{display:none;}
+.sb-nav-item{
+  display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;color:var(--ink-soft);font-size:13.5px;font-weight:600;
+  margin-bottom:2px;position:relative;transition:background .15s,color .15s;white-space:nowrap;
+}
+.sb-nav-item:hover{background:var(--mist);color:var(--ink);}
+.sb-nav-item.active{background:var(--green-light);color:var(--green-dark);}
+.sb-nav-item svg{width:19px;height:19px;flex-shrink:0;}
+.sb-nav-item .sb-label{overflow:hidden;transition:opacity .18s;}
+.sidebar.collapsed .sb-label{opacity:0;width:0;}
+.sb-nav-item .sb-badge{
+  margin-left:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;padding:0 4px;flex-shrink:0;
+}
+.sidebar.collapsed .sb-nav-item .sb-badge{display:none;}
+.sb-tooltip{
+  position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);background:var(--ink);color:#fff;
+  font-size:12px;font-weight:600;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .15s;z-index:70;
+}
+.sidebar.collapsed .sb-nav-item:hover .sb-tooltip{opacity:1;}
+.sb-logout{margin:10px 14px 20px;padding-top:14px;border-top:1px solid var(--line);}
+.sb-logout .sb-nav-item{color:var(--orange-dark);}
+.sb-logout .sb-nav-item:hover{background:var(--orange-light);}
+
+/* ---------- Main column ---------- */
+.dash-main{flex:1;min-width:0;display:flex;flex-direction:column;}
+.dash-topbar{
+  height:var(--header-h);position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 24px;
+}
+.tb-hamburger{display:none;width:38px;height:38px;border-radius:10px;align-items:center;justify-content:center;color:var(--ink-soft);flex-shrink:0;}
+.tb-hamburger:hover{background:var(--mist);}
+.tb-store{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.tb-store img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.tb-store .tb-store-name{font-family:var(--font-display);font-weight:700;font-size:14.5px;}
+.tb-search{flex:1;max-width:420px;}
+.tb-search .search-bar{background:var(--mist);border-radius:var(--radius-pill);display:flex;align-items:center;padding:4px 4px 4px 16px;border:1.5px solid transparent;}
+.tb-search .search-bar:focus-within{border-color:var(--green);background:#fff;}
+.tb-search input{flex:1;border:none;background:none;padding:9px;font-size:13.5px;}
+.tb-search input:focus{outline:none;}
+.tb-search .icon{color:var(--ink-soft);}
+.tb-actions{display:flex;align-items:center;gap:6px;margin-left:auto;flex-shrink:0;}
+.tb-icon-btn{position:relative;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink);}
+.tb-icon-btn:hover{background:var(--mist);}
+.tb-icon-btn .count{
+  position:absolute;top:2px;right:2px;background:var(--orange);color:#fff;font-size:9.5px;font-weight:700;min-width:16px;height:16px;
+  border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;border:2px solid #fff;
+}
+.tb-divider{width:1px;height:26px;background:var(--line);margin:0 2px;}
+.tb-profile{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;border-radius:var(--radius-pill);}
+.tb-profile:hover{background:var(--mist);}
+.tb-profile img{width:32px;height:32px;border-radius:50%;object-fit:cover;}
+.tb-profile .tb-profile-name{font-size:12.5px;font-weight:700;line-height:1.15;}
+.tb-profile .tb-profile-role{font-size:10.5px;color:var(--ink-soft);}
+
+/* ---------- Dropdown panels (notifications / messages / profile) ---------- */
+.tb-dropdown-wrap{position:relative;}
+.tb-dropdown{
+  position:absolute;top:calc(100% + 12px);right:0;width:340px;background:#fff;border-radius:var(--radius-md);
+  box-shadow:var(--shadow-lg);border:1px solid var(--line);z-index:80;display:none;overflow:hidden;
+}
+.tb-dropdown.open{display:block;}
+.tbd-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);}
+.tbd-head h4{font-size:13.5px;}
+.tbd-head a{font-size:11.5px;font-weight:700;color:var(--green-dark);}
+.tbd-list{max-height:340px;overflow-y:auto;}
+.tbd-item{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.tbd-item:last-child{border-bottom:none;}
+.tbd-item:hover{background:var(--mist);}
+.tbd-ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tbd-text p{font-size:12.5px;font-weight:600;line-height:1.35;}
+.tbd-text span{font-size:11px;color:var(--ink-soft);}
+.tbd-menu-item{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;font-weight:600;color:var(--ink);}
+.tbd-menu-item:hover{background:var(--mist);}
+.tbd-menu-item svg{width:17px;height:17px;color:var(--ink-soft);}
+.tbd-menu-item.danger{color:var(--orange-dark);}
+
+/* ---------- Content layout ---------- */
+.dash-body-row{display:flex;gap:22px;padding:22px;align-items:flex-start;max-width:1680px;margin:0 auto;width:100%;}
+.dash-content{flex:1;min-width:0;display:flex;flex-direction:column;gap:22px;}
+.dash-right{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:20px;}
+@media(max-width:1240px){.dash-right{display:none;}}
+
+.dash-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:2px;}
+.dash-section-head h2{font-size:17px;font-weight:700;}
+.dash-section-head .dsh-sub{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+
+/* ---------- Welcome banner ---------- */
+.welcome-banner{
+  border-radius:var(--radius-lg);background:linear-gradient(120deg,#0F7A38 0%,#16A34A 55%,#0d6b3f 100%);
+  color:#fff;padding:28px 30px;position:relative;overflow:hidden;
+}
+.welcome-banner::after{content:'';position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,0.3),transparent 70%);}
+.wb-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;z-index:1;}
+.wb-top h1{color:#fff;font-size:24px;font-weight:800;margin-bottom:4px;}
+.wb-store-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+.wb-store-row .store-name{font-size:15px;font-weight:700;}
+.wb-date{font-size:12.5px;color:rgba(255,255,255,0.75);font-family:var(--font-mono);}
+.wb-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.wb-badge{background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.28);color:#fff;}
+.wb-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;position:relative;z-index:1;}
+
+/* ---------- KPI cards ---------- */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.kpi-card{padding:18px;display:flex;flex-direction:column;gap:10px;}
+.kpi-top{display:flex;align-items:flex-start;justify-content:space-between;}
+.kpi-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.kpi-trend{display:flex;align-items:center;gap:3px;font-size:11.5px;font-weight:700;font-family:var(--font-mono);}
+.kpi-trend.up{color:var(--green-dark);}
+.kpi-trend.down{color:var(--orange-dark);}
+.kpi-value{font-family:var(--font-mono);font-size:26px;font-weight:800;letter-spacing:-0.01em;}
+.kpi-label{font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+@media(max-width:1400px){.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.kpi-grid{grid-template-columns:1fr;}}
+
+/* ---------- Chart placeholders ---------- */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.chart-card{padding:20px;}
+.chart-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.chart-card-head h3{font-size:14.5px;}
+.chart-placeholder{
+  height:170px;border-radius:12px;background:
+    linear-gradient(var(--mist) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, var(--mist) 1px, transparent 1px) 0 0/24px 24px,#fff;
+  border:1.5px dashed var(--line);display:flex;align-items:flex-end;gap:6px;padding:16px;position:relative;
+}
+.chart-placeholder .bar{flex:1;background:linear-gradient(180deg,var(--green) 0%, var(--green-light) 140%);border-radius:5px 5px 0 0;opacity:0.85;}
+.chart-placeholder .bar:nth-child(odd){background:linear-gradient(180deg,var(--orange) 0%, var(--orange-light) 140%);}
+.chart-caption{font-size:11px;color:var(--ink-soft);margin-top:10px;display:flex;align-items:center;gap:6px;}
+@media(max-width:900px){.chart-grid{grid-template-columns:1fr;}}
+
+/* ---------- Tables ---------- */
+.table-card{padding:0;overflow:hidden;}
+.table-card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap;}
+.table-card-head h3{font-size:15px;}
+.table-wrap{overflow-x:auto;}
+table.dash-table{width:100%;border-collapse:collapse;min-width:640px;}
+.dash-table thead th{
+  text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);
+  padding:10px 20px;border-bottom:1px solid var(--line);background:var(--mist);white-space:nowrap;
+}
+.dash-table tbody td{padding:13px 20px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle;white-space:nowrap;}
+.dash-table tbody tr:last-child td{border-bottom:none;}
+.dash-table tbody tr:hover{background:var(--mist);}
+.dt-customer{display:flex;align-items:center;gap:8px;}
+.dt-customer img{width:26px;height:26px;border-radius:50%;object-fit:cover;}
+.dt-amount{font-family:var(--font-mono);font-weight:700;}
+.stock-bar-wrap{width:80px;height:6px;border-radius:4px;background:var(--line);overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px;}
+.stock-bar-fill{height:100%;border-radius:4px;}
+
+/* ---------- Customer cards ---------- */
+.customer-scroller{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;}
+.customer-card{width:220px;flex-shrink:0;padding:18px;text-align:center;}
+.customer-card img{width:56px;height:56px;border-radius:50%;object-fit:cover;margin:0 auto 10px;}
+.customer-card h4{font-size:14px;margin-bottom:2px;}
+.customer-card .cc-meta{font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;}
+.customer-card .cc-stats{display:flex;justify-content:center;gap:16px;margin-bottom:14px;}
+.customer-card .cc-stat b{display:block;font-family:var(--font-mono);font-size:15px;}
+.customer-card .cc-stat span{font-size:10.5px;color:var(--ink-soft);}
+
+/* ---------- Quick actions ---------- */
+.qa-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.qa-card{padding:20px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;}
+.qa-ic{width:46px;height:46px;border-radius:13px;background:var(--green-light);color:var(--green-dark);display:flex;align-items:center;justify-content:center;}
+.qa-card:nth-child(2n) .qa-ic{background:var(--orange-light);color:var(--orange-dark);}
+.qa-card span{font-size:12.5px;font-weight:700;}
+@media(max-width:1100px){.qa-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px){.qa-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ---------- Ad summary ---------- */
+.ad-summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px;}
+.ad-stat{text-align:center;padding:14px 8px;border-radius:12px;background:var(--mist);}
+.ad-stat b{display:block;font-family:var(--font-mono);font-size:20px;}
+.ad-stat span{font-size:11px;color:var(--ink-soft);font-weight:600;}
+@media(max-width:640px){.ad-summary-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ---------- Performance cards ---------- */
+.perf-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.perf-card{padding:18px;}
+.perf-card .perf-label{font-size:12px;color:var(--ink-soft);font-weight:600;margin-bottom:8px;}
+.perf-card .perf-value{font-family:var(--font-mono);font-size:20px;font-weight:800;margin-bottom:10px;}
+.perf-bar{height:6px;border-radius:4px;background:var(--line);overflow:hidden;}
+.perf-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--green-dark));}
+@media(max-width:1200px){.perf-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:640px){.perf-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ---------- Right panel widgets ---------- */
+.rp-card{padding:0;overflow:hidden;}
+.rp-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line);}
+.rp-head h3{font-size:14px;}
+.rp-head a{font-size:11.5px;font-weight:700;color:var(--green-dark);}
+.rp-list{max-height:400px;overflow-y:auto;}
+.snapshot-card{padding:18px;}
+.snapshot-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.snapshot-row:last-child{border-bottom:none;}
+.snapshot-row span:first-child{color:var(--ink-soft);}
+.status-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;}
+.status-toggle-row .stat-label{font-size:13px;font-weight:700;}
+.switch{position:relative;width:42px;height:24px;flex-shrink:0;}
+.switch input{opacity:0;width:100%;height:100%;position:absolute;margin:0;cursor:pointer;z-index:2;}
+.switch .track{position:absolute;inset:0;background:var(--line);border-radius:var(--radius-pill);transition:background .18s;}
+.switch .thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--shadow-sm);transition:transform .18s;}
+.switch input:checked ~ .track{background:var(--green);}
+.switch input:checked ~ .thumb{transform:translateX(18px);}
+
+/* ============================================================
+   MOBILE DRAWER SIDEBAR
+   ============================================================ */
+.sidebar-backdrop{position:fixed;inset:0;background:rgba(20,35,28,0.55);z-index:150;display:none;}
+.sidebar-backdrop.open{display:block;}
+
+@media(max-width:980px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;width:280px;transform:translateX(-100%);transition:transform .25s ease;z-index:200;}
+  .sidebar.mobile-open{transform:translateX(0);}
+  .sidebar.collapsed{width:280px;}
+  .sidebar.collapsed .logo-text,.sidebar.collapsed .sb-label,.sidebar.collapsed .sb-section-label{opacity:1;width:auto;}
+  .tb-hamburger{display:flex;}
+  .sb-collapse-btn{display:none;}
+  .dash-body-row{padding:16px;flex-direction:column;}
+  .tb-search{display:none;}
+}
+@media(max-width:640px){
+  .dash-topbar{padding:0 14px;gap:10px;}
+  .tb-store .tb-store-name{display:none;}
+  .wb-actions .btn{flex:1;}
+}
+
+
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.logo-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(140deg,var(--green) 0%,var(--green-dark) 100%);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 4px 12px rgba(22,163,74,0.35);position:relative;flex-shrink:0;}
+.logo-mark svg{width:24px;height:24px;}
+.logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.logo-text .name{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-0.01em;}
+.logo-text .kn{font-size:10.5px;color:var(--ink-soft);letter-spacing:0.04em;}
+.skip-link{position:absolute;left:-999px;top:0;background:#fff;padding:10px 16px;z-index:999;border-radius:8px;}
+.skip-link:focus{left:16px;top:16px;}
+.sm-drawer-panel{display:none;}
+.sm-drawer-panel.active{display:block;}
+
+
+/* ============================================================
+   STORE MANAGEMENT
+   ============================================================ */
+.sm-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);}
+.sm-toolbar .search-bar{flex:1;min-width:200px;background:var(--mist);border-radius:var(--radius-pill);display:flex;align-items:center;padding:4px 4px 4px 14px;}
+.sm-toolbar input{flex:1;border:none;background:none;padding:8px;font-size:13px;}
+.sm-toolbar input:focus{outline:none;}
+.sm-toolbar select{border:1.5px solid var(--line);border-radius:var(--radius-pill);padding:8px 14px;font-size:12.5px;font-weight:600;background:#fff;}
+
+.sm-store-name-cell{display:flex;align-items:center;gap:10px;}
+.sm-store-name-cell img{width:32px;height:32px;border-radius:8px;object-fit:cover;background:var(--mist);}
+.sm-actions-cell{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* ---------- Detail drawer ---------- */
+.drawer-backdrop{position:fixed;inset:0;background:rgba(20,35,28,0.55);z-index:400;display:none;}
+.drawer-backdrop.open{display:block;}
+.sm-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:560px;max-width:100vw;background:#fff;z-index:401;
+  box-shadow:var(--shadow-lg);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s ease;
+}
+.sm-drawer.open{transform:translateX(0);}
+.sm-drawer-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line);flex-shrink:0;}
+.sm-drawer-header h3{font-size:16.5px;}
+.sm-drawer-tabs{display:flex;gap:2px;padding:0 22px;border-bottom:1px solid var(--line);overflow-x:auto;flex-shrink:0;}
+.sm-drawer-tab-btn{padding:12px 12px;font-size:12.5px;font-weight:700;color:var(--ink-soft);white-space:nowrap;position:relative;}
+.sm-drawer-tab-btn.active{color:var(--green-dark);}
+.sm-drawer-tab-btn.active::after{content:'';position:absolute;left:8px;right:8px;bottom:-1px;height:2.5px;background:var(--green);}
+.sm-drawer-body{padding:20px 22px;overflow-y:auto;flex:1;}
+.sm-drawer-panel{display:none;}
+.sm-drawer-panel.active{display:block;}
+.sm-drawer-footer{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0;}
+.sm-drawer-footer .btn{flex:1;min-width:100px;}
+
+.sm-info-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.sm-info-row:last-child{border-bottom:none;}
+.sm-info-row span:first-child{color:var(--ink-soft);}
+.sm-info-row span:last-child{font-weight:600;text-align:right;max-width:60%;}
+
+.sm-doc-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);}
+.sm-doc-row:last-child{border-bottom:none;}
+.sm-doc-row .doc-ic{width:38px;height:38px;border-radius:10px;background:var(--mist);color:var(--ink-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sm-doc-row .doc-info{flex:1;}
+.sm-doc-row .doc-info strong{display:block;font-size:13px;}
+.sm-doc-row .doc-info span{font-size:11.5px;color:var(--ink-soft);}
+.sm-doc-actions{display:flex;gap:6px;}
+
+.sm-perf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.sm-perf-card{background:var(--mist);border-radius:10px;padding:14px;text-align:center;}
+.sm-perf-card b{display:block;font-family:var(--font-mono);font-size:19px;}
+.sm-perf-card span{font-size:11px;color:var(--ink-soft);}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.field label{font-size:12.5px;font-weight:700;}
+
+
+/* ============================================================
+   ADMIN DASHBOARD — additions on top of the shared dashboard shell
+   ============================================================ */
+.admin-kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+@media(max-width:1400px){.admin-kpi-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:900px){.admin-kpi-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.admin-kpi-grid{grid-template-columns:1fr;}}
+
+.admin-kpi-card{padding:16px;}
+.admin-kpi-card .kpi-value{font-size:21px;}
+.admin-kpi-card .kpi-label{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.admin-kpi-card .est-tag{font-size:8.5px;font-weight:700;background:var(--mist);color:var(--ink-soft);padding:2px 6px;border-radius:6px;}
+
+.health-badge{display:inline-flex;align-items:center;gap:8px;background:var(--green-light);color:var(--green-dark);padding:8px 16px;border-radius:var(--radius-pill);font-weight:700;font-size:13px;}
+.health-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:healthPulse 2s ease-in-out infinite;}
+@keyframes healthPulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+
+/* ============================================================
+   DELIVERY PARTNER — availability toggle + status states
+   Only genuinely new components live here; everything else
+   reuses dash_style.txt / asm_style.txt classes.
+   ============================================================ */
+.avail-toggle{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;}
+.avail-toggle input{position:absolute;opacity:0;width:0;height:0;}
+.avail-toggle .at-label{font-size:12.5px;font-weight:700;color:var(--ink-soft);min-width:52px;text-align:right;}
+.avail-toggle .at-track{
+  width:44px;height:24px;border-radius:var(--radius-pill);background:var(--line);
+  position:relative;transition:background .18s;flex-shrink:0;
+}
+.avail-toggle .at-thumb{
+  position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.25);transition:transform .18s;
+}
+.avail-toggle input:checked + .at-track{background:var(--green);}
+.avail-toggle input:checked + .at-track .at-thumb{transform:translateX(20px);}
+.avail-toggle input:focus-visible + .at-track{outline:2px solid var(--green-dark);outline-offset:2px;}
+.avail-toggle.is-online .at-label{color:var(--green-dark);}
+
+.tb-avatar-fallback{
+  width:34px;height:34px;border-radius:50%;background:var(--green-light);color:var(--green-dark);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+/* Status banner — pending / rejected / offline states */
+.dp-banner{
+  display:flex;align-items:flex-start;gap:13px;padding:15px 18px;border-radius:var(--radius-md);
+  margin-bottom:20px;border:1px solid;
+}
+.dp-banner svg{width:20px;height:20px;flex-shrink:0;margin-top:1px;}
+.dp-banner strong{display:block;font-size:14px;margin-bottom:3px;}
+.dp-banner span{font-size:13px;line-height:1.5;}
+.dp-banner.warn{background:var(--orange-light);border-color:#F9C89A;color:var(--orange-dark);}
+.dp-banner.danger{background:#FEE2E2;border-color:#FCA5A5;color:#991B1B;}
+.dp-banner.info{background:var(--mist);border-color:var(--line);color:var(--ink-soft);}
+
+/* Active delivery card */
+.dp-active-card{padding:18px;border:1px solid var(--line);border-radius:var(--radius-md);background:#fff;}
+.dp-active-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.dp-active-head h4{font-size:15px;font-weight:700;}
+.dp-leg{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);}
+.dp-leg-ic{
+  width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  background:var(--mist);color:var(--ink-soft);
+}
+.dp-leg-ic svg{width:17px;height:17px;}
+.dp-leg-body strong{display:block;font-size:13.5px;margin-bottom:2px;}
+.dp-leg-body span{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+.dp-leg-actions{margin-left:auto;display:flex;gap:8px;align-items:center;flex-shrink:0;}
+
+@media(max-width:640px){
+  .avail-toggle .at-label{display:none;}
+  .dp-leg-actions{margin-left:0;width:100%;margin-top:8px;}
+}
+
+</style>
+</head>
+<body class="dash-body-tag">
+
+<a href="#main" class="skip-link">Skip to content</a>
+
+<svg width="0" height="0" style="position:absolute">
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 8.6c0 4.9-8.8 10.1-8.8 10.1S3.2 13.5 3.2 8.6a4.9 4.9 0 0 1 8.8-3 4.9 4.9 0 0 1 8.8 3Z"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6.5 8-6.5s6.5 2 8 6.5"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11H3z"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l3 6.2 6.8.9-5 4.8 1.2 6.8L12 17.9 5.9 21.2l1.2-6.8-5-4.8 6.8-.9Z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 12l-8 8-9-9V3h8Z"/><circle cx="7" cy="7" r="1.4"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 8h11v9H2z"/><path d="M13 11h4l4 4v2h-8z"/><circle cx="6.5" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2l8 3.5v6c0 5-3.4 8.5-8 10.5-4.6-2-8-5.5-8-10.5v-6Z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-return" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/></symbol>
+<symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="5" height="7" rx="2"/><rect x="16.5" y="13" width="5" height="7" rx="2"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5.5-5.5L4 20"/></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24"><path d="M16.3 2.3c.2 1.2-.3 2.4-1 3.2-.8.9-2 1.6-3.2 1.5-.2-1.2.4-2.4 1.1-3.2.8-.9 2.1-1.5 3.1-1.5ZM19.8 17c-.6 1.4-.9 2-1.7 3.2-1.1 1.7-2.6 3.8-4.5 3.8-1.7 0-2.1-1.1-4.4-1.1-2.3 0-2.8 1.1-4.5 1.1-1.9 0-3.3-1.9-4.4-3.6C-1.6 16.6-.7 10 3 10c1.7 0 2.9 1.2 4.4 1.2 1.4 0 2.4-1.2 4.5-1.2 1.4 0 3.6.6 5 2.6-4.4 2.4-3.7 8.4 2.9 4.4Z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></symbol>
+<symbol id="i-fb" viewBox="0 0 24 24"><path d="M14 9h3V5h-3a4 4 0 0 0-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9a1 1 0 0 1 1-1Z"/></symbol>
+<symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></symbol>
+<symbol id="i-tw" viewBox="0 0 24 24"><path d="M22 5.9c-.7.3-1.5.6-2.3.7a4 4 0 0 0 1.8-2.2 8 8 0 0 1-2.5 1 4 4 0 0 0-6.9 3.6A11.4 11.4 0 0 1 3.8 4.6a4 4 0 0 0 1.3 5.3 4 4 0 0 1-1.8-.5v.1a4 4 0 0 0 3.2 3.9 4 4 0 0 1-1.8.1 4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 17.6a11.3 11.3 0 0 0 6.1 1.8c7.3 0 11.3-6 11.3-11.3v-.5A8 8 0 0 0 22 5.9Z"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+<symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-layout" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></symbol>
+<symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2"/><path d="M8 11h8M8 15h5"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.3"/><path d="M2.5 20c1-3.6 3.7-5.5 6.5-5.5s5.5 1.9 6.5 5.5"/><circle cx="17" cy="8.5" r="2.6"/><path d="M17.5 14.6c2.2.5 3.7 2.1 4.5 5"/></symbol>
+<symbol id="i-archive" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="5" rx="1.2"/><path d="M4 9v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9"/><path d="M10 13h4"/></symbol>
+<symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M3 10v4a1 1 0 0 0 1 1h2l9 5V4L6 9H4a1 1 0 0 0-1 1Z"/><path d="M18 9a4 4 0 0 1 0 6"/></symbol>
+<symbol id="i-percent" viewBox="0 0 24 24"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="2.4"/><circle cx="17" cy="17" r="2.4"/></symbol>
+<symbol id="i-bar-chart" viewBox="0 0 24 24"><path d="M4 20V10M12 20V4M20 20v-7"/><path d="M2 20h20"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v3"/><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="16.5" cy="13.5" r="1.4"/></symbol>
+<symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.9 2.9l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.9-2.9l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.9-2.9l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.9 2.9l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.2a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+<symbol id="i-help-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.2 9a2.8 2.8 0 0 1 5.4.9c0 1.9-2.6 1.9-2.6 3.6"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></symbol>
+<symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="M3 6l9 6.5L21 6"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="18.5" r="1.4"/></symbol>
+<symbol id="i-trending-up" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></symbol>
+<symbol id="i-trending-down" viewBox="0 0 24 24"><path d="M3 7l6 6 4-4 8 9"/><path d="M15 18h6v-6"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15.4-6.4L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.4 6.4L3 16"/><path d="M3 21v-5h5"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 1 21h22Z"/><path d="M12 9v5"/><circle cx="12" cy="17.3" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-message" viewBox="0 0 24 24"><path d="M21 12a8 8 0 1 1-3.5-6.6"/><path d="M21 3l-9 9"/><path d="M14 3h7v7"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4Z"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+<symbol id="i-file" viewBox="0 0 24 24"><path d="M6 2h8l5 5v15H6z"/><path d="M14 2v5h5"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24"><path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2C9.5 22 2 14.5 2 6a2 2 0 0 1 2-2Z"/></symbol>
+</svg>
+
+<div id="toast-stack"></div>
+
+<div class="sidebar-backdrop" id="sidebar-backdrop" onclick="closeMobileSidebar()"></div>
+<div class="dash-shell">
+<aside class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <div class="logo-mark"><svg class="icon" style="color:#fff"><use href="#i-truck"/></svg></div>
+    <div class="logo-text">
+      <span class="name" style="font-size:16px;">Namma Bazar</span>
+      <span class="kn">Delivery Partner</span>
+    </div>
+    <button class="sb-collapse-btn" onclick="Sidebar.toggleCollapse()" aria-label="Collapse sidebar">
+      <svg class="icon icon-sm" id="collapse-icon"><use href="#i-chevron-left"/></svg>
+    </button>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-nav-item" onclick="location.href='delivery-dashboard.html'"><svg><use href="#i-layout"/></svg><span class="sb-label">Dashboard</span><span class="sb-tooltip">Dashboard</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Deliveries</div>
+    <div class="sb-nav-item" onclick="location.href='delivery-available-orders.html'"><svg><use href="#i-clipboard"/></svg><span class="sb-label">Available Orders</span><span class="sb-tooltip">Available Orders</span></div>
+    <div class="sb-nav-item active" onclick="Toast.show('You are already on My Deliveries','i-truck')"><svg><use href="#i-truck"/></svg><span class="sb-label">My Deliveries</span><span class="sb-tooltip">My Deliveries</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Earnings</div>
+    <div class="sb-nav-item" onclick="location.href='delivery-earnings.html'"><svg><use href="#i-wallet"/></svg><span class="sb-label">Earnings &amp; Wallet</span><span class="sb-tooltip">Earnings &amp; Wallet</span></div>
+  </div>
+
+  <div class="sb-section">
+    <div class="sb-section-label">Account</div>
+    <div class="sb-nav-item" onclick="location.href='delivery-notifications.html'"><svg><use href="#i-bell"/></svg><span class="sb-label">Notifications</span><span class="sb-tooltip">Notifications</span></div>
+    <div class="sb-nav-item" onclick="location.href='delivery-profile.html'"><svg><use href="#i-user"/></svg><span class="sb-label">Profile &amp; Documents</span><span class="sb-tooltip">Profile &amp; Documents</span></div>
+    <div class="sb-nav-item" onclick="location.href='delivery-settings.html'"><svg><use href="#i-settings"/></svg><span class="sb-label">Settings</span><span class="sb-tooltip">Settings</span></div>
+  </div>
+
+  <div class="sb-logout">
+    <div class="sb-nav-item" onclick="Auth.logout()"><svg><use href="#i-logout"/></svg><span class="sb-label">Logout</span><span class="sb-tooltip">Logout</span></div>
+  </div>
+</aside>
+
+<div class="dash-main" id="main">
+<header class="dash-topbar">
+  <button class="tb-hamburger" onclick="openMobileSidebar()" aria-label="Open menu"><svg class="icon"><use href="#i-menu"/></svg></button>
+  <div class="tb-store"><span class="tb-store-name" style="font-family:var(--font-display);font-weight:700;">My Deliveries</span></div>
+  <div class="tb-actions">
+    <label class="avail-toggle" for="dp-online-toggle">
+      <span class="at-label" id="dp-online-label">Offline</span>
+      <input type="checkbox" id="dp-online-toggle" onchange="DPDashboard.toggleOnline(this.checked)" aria-label="Toggle online availability">
+      <span class="at-track"><span class="at-thumb"></span></span>
+    </label>
+    <div class="tb-divider"></div>
+    <div class="tb-dropdown-wrap">
+      <button class="tb-profile" onclick="Dropdowns.toggle('profile')">
+        <span class="tb-avatar-fallback" id="tb-avatar"><svg class="icon icon-sm"><use href="#i-user"/></svg></span>
+        <span style="text-align:left;"><span class="tb-profile-name" id="tb-profile-name" style="display:block;">Partner</span><span class="tb-profile-role" id="tb-profile-role">Delivery Partner</span></span>
+      </button>
+      <div class="tb-dropdown" id="dd-profile" style="width:200px;">
+        <a class="tbd-menu-item" href="delivery-profile.html"><svg><use href="#i-user"/></svg> Profile &amp; Documents</a>
+        <a class="tbd-menu-item" href="delivery-earnings.html"><svg><use href="#i-wallet"/></svg> Earnings</a>
+        <a class="tbd-menu-item danger" href="#" onclick="Auth.logout();return false;"><svg><use href="#i-logout"/></svg> Logout</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<div class="dash-body-row">
+  <div class="dash-content" style="max-width:100%;">
+
+    <section class="card table-card">
+      <div class="card-head">
+        <h3>Active Delivery</h3>
+        <span id="dpmd-tracking-state" style="font-size:12px;color:var(--ink-soft);"></span>
+      </div>
+      <div id="dpmd-active" style="padding:18px;"></div>
+    </section>
+
+    <section class="card table-card" style="margin-top:20px;">
+      <div class="sm-drawer-tabs" id="dpmd-tabs" style="padding:0 20px;"></div>
+
+      <div class="sm-drawer-panel active" id="dpmd-panel-history">
+        <div class="table-wrap">
+          <table class="dash-table">
+            <thead><tr><th>Order</th><th>Store</th><th>Completed</th><th>Earned</th></tr></thead>
+            <tbody id="dpmd-history-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sm-drawer-panel" id="dpmd-panel-activity">
+        <div style="padding:14px 20px;background:var(--mist);font-size:12.5px;color:var(--ink-soft);">
+          Every accept, decline, and completion you make is recorded here.
+        </div>
+        <div class="table-wrap">
+          <table class="dash-table">
+            <thead><tr><th>Action</th><th>Reference</th><th>When</th></tr></thead>
+            <tbody id="dpmd-activity-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+function svgUse(id, cls='icon'){ return `<svg class="${cls}"><use href="#${id}"/></svg>`; }
+function money(n){ return '₹' + Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 }); }
+function esc(str){
+  return String(str == null ? '' : str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(ts){
+  return ts ? new Date(ts).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+}
+
+const Toast = {
+  show(msg, icon='i-check'){
+    const stack = document.getElementById('toast-stack');
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `${svgUse(icon)}<span>${esc(msg)}</span>`;
+    stack.appendChild(el);
+    setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; el.style.transition='all .25s'; setTimeout(()=>el.remove(),260); }, 2800);
+  }
+};
+
+const Dropdowns = {
+  toggle(name){
+    const id = 'dd-' + name;
+    const isOpen = document.getElementById(id).classList.contains('open');
+    document.querySelectorAll('.tb-dropdown').forEach(d=>d.classList.remove('open'));
+    if(!isOpen) document.getElementById(id).classList.add('open');
+  },
+  closeAll(){ document.querySelectorAll('.tb-dropdown').forEach(d=>d.classList.remove('open')); }
+};
+document.addEventListener('click', e=>{ if(!e.target.closest('.tb-dropdown-wrap')) Dropdowns.closeAll(); });
+
+const Sidebar = {
+  toggleCollapse(){
+    const sb = document.getElementById('sidebar');
+    sb.classList.toggle('collapsed');
+    document.getElementById('collapse-icon').innerHTML = `<use href="#${sb.classList.contains('collapsed') ? 'i-chevron-right':'i-chevron-left'}"/>`;
+  }
+};
+function openMobileSidebar(){ document.getElementById('sidebar').classList.add('mobile-open'); document.getElementById('sidebar-backdrop').classList.add('open'); }
+function closeMobileSidebar(){ document.getElementById('sidebar').classList.remove('mobile-open'); document.getElementById('sidebar-backdrop').classList.remove('open'); }
+
+const Auth = {
+  async logout(){
+    if(confirm('Log out of your delivery partner account?')){
+      await supabaseClient.auth.signOut();
+      window.location.href = 'delivery-login.html';
+    }
+  }
+};
+
+const MD_TABS = [{id:'history', label:'Delivery History'}, {id:'activity', label:'My Activity Log'}];
+
+const DPDeliveries = {
+  session: null,
+  partner: null,
+  active: null,
+  watchId: null,
+  pingTimer: null,
+  lastPing: 0,
+  busy: false,
+
+  async init(){
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if(!session){ this.denyAccess('Please sign in to view your deliveries.'); return; }
+    this.session = session;
+
+    const { data: partner } = await supabaseClient
+      .from('delivery_partners')
+      .select('id, is_online, documents_status')
+      .eq('profile_id', session.user.id)
+      .maybeSingle();
+    if(!partner){ this.denyAccess('This account is not registered as a delivery partner.'); return; }
+    this.partner = partner;
+
+    const { data: profile } = await supabaseClient
+      .from('profiles').select('full_name').eq('id', session.user.id).maybeSingle();
+    if(profile && profile.full_name) document.getElementById('tb-profile-name').textContent = profile.full_name;
+
+    this.syncToggle(partner.is_online);
+    this.renderTabs();
+    await this.loadAll();
+  },
+
+  denyAccess(message){
+    document.querySelector('.dash-body-row').innerHTML = `
+      <div class="card" style="grid-column:1/-1;padding:60px 24px;text-align:center;">
+        <h3>Access Restricted</h3><p style="color:var(--ink-soft);margin:8px 0 20px;">${esc(message)}</p>
+        <a href="delivery-login.html" class="btn btn-primary">Go to Sign In</a>
+      </div>`;
+  },
+
+  syncToggle(isOnline){
+    const cb = document.getElementById('dp-online-toggle');
+    const label = document.getElementById('dp-online-label');
+    const wrap = cb.closest('.avail-toggle');
+    cb.checked = !!isOnline;
+    label.textContent = isOnline ? 'Online' : 'Offline';
+    wrap.classList.toggle('is-online', !!isOnline);
+    cb.disabled = this.partner.documents_status !== 'approved';
+  },
+
+  async toggleOnline(checked){
+    if(this.partner.documents_status !== 'approved'){
+      this.syncToggle(false);
+      Toast.show('You can go online once your application is approved', 'i-alert');
+      return;
+    }
+    const { error } = await supabaseClient
+      .from('delivery_partners')
+      .update({ is_online: checked, last_online_at: checked ? new Date().toISOString() : null })
+      .eq('id', this.partner.id);
+    if(error){ this.syncToggle(this.partner.is_online); Toast.show('Could not update your availability', 'i-alert'); return; }
+    this.partner.is_online = checked;
+    this.syncToggle(checked);
+    Toast.show(checked ? 'You are now online' : 'You are now offline', checked ? 'i-check' : 'i-bolt');
+  },
+
+  renderTabs(){
+    document.getElementById('dpmd-tabs').innerHTML = MD_TABS.map((t,i) =>
+      `<button class="sm-drawer-tab-btn ${i===0?'active':''}" data-tab="${t.id}" onclick="DPDeliveries.showTab('${t.id}')">${t.label}</button>`
+    ).join('');
+  },
+  showTab(id){
+    document.querySelectorAll('#dpmd-tabs .sm-drawer-tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===id));
+    document.querySelectorAll('.sm-drawer-panel').forEach(p=>p.classList.toggle('active', p.id==='dpmd-panel-'+id));
+  },
+
+  async loadAll(){
+    const [{ data: assignments }, { data: activity }] = await Promise.all([
+      supabaseClient.from('delivery_assignments')
+        .select('id, status, offered_at, completed_at, earning_amount, order_id, orders(id, order_number, status, total_amount, payment_method, delivery_address_id, customer_id, stores(name, area, mobile_number))')
+        .eq('delivery_partner_id', this.partner.id)
+        .order('offered_at', { ascending: false })
+        .limit(80),
+      supabaseClient.from('delivery_partner_activity_log')
+        .select('action_type, target_id, notes, created_at')
+        .eq('delivery_partner_id', this.partner.id)
+        .order('created_at', { ascending: false })
+        .limit(40)
+    ]);
+
+    const all = assignments || [];
+    this.active = all.find(a => a.status === 'accepted') || null;
+
+    await this.renderActive();
+    this.renderHistory(all.filter(a => a.status === 'completed'));
+    this.renderActivity(activity || []);
+
+    if(this.active) this.startTracking(); else this.stopTracking();
+  },
+
+  async renderActive(){
+    const el = document.getElementById('dpmd-active');
+    if(!this.active){
+      el.innerHTML = `<p style="color:var(--ink-soft);font-size:13px;text-align:center;padding:26px 0;">
+        No delivery in progress. Accept an offer from
+        <a href="delivery-available-orders.html">Available Orders</a> to get started.</p>`;
+      return;
+    }
+
+    const a = this.active;
+    const o = a.orders || {};
+    const store = o.stores || {};
+
+    // Address and customer contact become readable only once accepted (RLS).
+    let address = null, customer = null;
+    if(o.delivery_address_id){
+      const { data } = await supabaseClient
+        .from('customer_addresses')
+        .select('label, full_address, area, state, pincode, cities(name)')
+        .eq('id', o.delivery_address_id).maybeSingle();
+      address = data;
+    }
+    if(o.customer_id){
+      const { data } = await supabaseClient
+        .from('profiles').select('full_name, phone').eq('id', o.customer_id).maybeSingle();
+      customer = data;
+    }
+
+    const storeQ = encodeURIComponent(`${store.name || ''} ${store.area || ''} Sagar Karnataka`);
+    const addrText = address
+      ? [address.full_address, address.area, (address.cities && address.cities.name), address.pincode].filter(Boolean).join(', ')
+      : null;
+    const custQ = addrText ? encodeURIComponent(addrText) : null;
+    const cod = o.payment_method === 'cod';
+    const picked = o.status === 'out_for_delivery';
+
+    el.innerHTML = `
+      <div class="dp-active-card">
+        <div class="dp-active-head">
+          <h4>Order ${esc(o.order_number || '—')}</h4>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            ${cod ? `<span class="badge badge-gold">Collect ${money(o.total_amount)} COD</span>` : `<span class="badge badge-green">Prepaid</span>`}
+            <span class="badge badge-green">${money(a.earning_amount)} for you</span>
+          </div>
+        </div>
+
+        <div class="dp-leg">
+          <div class="dp-leg-ic">${svgUse('i-store','icon icon-sm')}</div>
+          <div class="dp-leg-body">
+            <strong>1. Pick up from ${esc(store.name || 'the store')}</strong>
+            <span>${esc(store.area ? store.area + ', Sagar' : 'Sagar')}</span>
+          </div>
+          <div class="dp-leg-actions">
+            ${store.mobile_number ? `<a class="btn btn-ghost btn-sm" href="tel:${esc(store.mobile_number)}">${svgUse('i-phone','icon icon-sm')} Call</a>` : ''}
+            <a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${storeQ}">${svgUse('i-pin','icon icon-sm')} Navigate</a>
+          </div>
+        </div>
+
+        <div class="dp-leg">
+          <div class="dp-leg-ic">${svgUse('i-home','icon icon-sm')}</div>
+          <div class="dp-leg-body">
+            <strong>2. Deliver to ${esc(customer ? customer.full_name : 'the customer')}</strong>
+            <span>${addrText ? esc(addrText) : 'Address unavailable'}${address && address.label ? ' &middot; ' + esc(address.label) : ''}</span>
+          </div>
+          <div class="dp-leg-actions">
+            ${customer && customer.phone ? `<a class="btn btn-ghost btn-sm" href="tel:${esc(customer.phone)}">${svgUse('i-phone','icon icon-sm')} Call</a>` : ''}
+            ${custQ ? `<a class="btn btn-ghost btn-sm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${custQ}">${svgUse('i-pin','icon icon-sm')} Navigate</a>` : ''}
+          </div>
+        </div>
+
+        <div class="dp-leg" style="align-items:center;">
+          <div class="dp-leg-body">
+            <strong>Status: ${picked ? 'Out for delivery' : 'Heading to store'}</strong>
+            <span>${picked ? 'Mark delivered once the customer has the order' + (cod ? ' and you have collected the cash.' : '.') : 'Mark picked up once you have the order from the store.'}</span>
+          </div>
+          <div class="dp-leg-actions">
+            ${picked
+              ? `<button class="btn btn-primary btn-sm" onclick="DPDeliveries.markDelivered()">Mark Delivered</button>`
+              : `<button class="btn btn-primary btn-sm" onclick="DPDeliveries.markPickedUp()">Mark Picked Up</button>`}
+          </div>
+        </div>
+      </div>`;
+  },
+
+  renderHistory(done){
+    const body = document.getElementById('dpmd-history-body');
+    if(!done.length){
+      body.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--ink-soft);padding:26px;">No completed deliveries yet.</td></tr>`;
+      return;
+    }
+    body.innerHTML = done.map(a => {
+      const o = a.orders || {}; const store = o.stores || {};
+      return `<tr>
+        <td class="mono" style="font-size:12.5px;">${esc(o.order_number || '—')}</td>
+        <td>${esc(store.name || '—')}</td>
+        <td style="font-size:12.5px;color:var(--ink-soft);">${fmtDate(a.completed_at)}</td>
+        <td class="mono">${money(a.earning_amount)}</td>
+      </tr>`;
+    }).join('');
+  },
+
+  renderActivity(rows){
+    const body = document.getElementById('dpmd-activity-body');
+    if(!rows.length){
+      body.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--ink-soft);padding:26px;">No activity recorded yet.</td></tr>`;
+      return;
+    }
+    const labels = {
+      assignment_accepted: 'Accepted a delivery',
+      assignment_rejected: 'Declined an offer',
+      delivery_completed: 'Completed a delivery'
+    };
+    body.innerHTML = rows.map(r => `<tr>
+      <td>${esc(labels[r.action_type] || r.action_type)}</td>
+      <td class="mono" style="font-size:11.5px;color:var(--ink-soft);">${r.target_id ? esc(String(r.target_id).slice(0,8)) : '—'}</td>
+      <td style="font-size:12.5px;color:var(--ink-soft);">${fmtDate(r.created_at)}</td>
+    </tr>`).join('');
+  },
+
+  async markPickedUp(){
+    if(this.busy || !this.active) return;
+    this.busy = true;
+    const { error } = await supabaseClient
+      .from('orders').update({ status: 'out_for_delivery' }).eq('id', this.active.order_id);
+    this.busy = false;
+    if(error){ Toast.show(error.message || 'Could not update the order', 'i-alert'); return; }
+    Toast.show('Marked as picked up', 'i-check');
+    await this.loadAll();
+  },
+
+  async markDelivered(){
+    if(this.busy || !this.active) return;
+    const o = this.active.orders || {};
+    const cod = o.payment_method === 'cod';
+    const msg = cod
+      ? `Confirm delivery of order ${o.order_number || ''} and that you collected ${money(o.total_amount)} in cash?`
+      : `Confirm delivery of order ${o.order_number || ''}?`;
+    if(!confirm(msg)) return;
+
+    this.busy = true;
+    const { data, error } = await supabaseClient
+      .rpc('complete_delivery_assignment', { p_assignment_id: this.active.id });
+    this.busy = false;
+
+    if(error){ Toast.show(error.message || 'Could not complete the delivery', 'i-alert'); return; }
+    if(data && data.ok === false){ Toast.show(data.reason || 'This delivery is not in progress', 'i-alert'); await this.loadAll(); return; }
+
+    Toast.show('Delivery completed — earning credited', 'i-check');
+    this.stopTracking();
+    await this.loadAll();
+  },
+
+  // ---- Live location tracking (real browser geolocation) -------------------
+  startTracking(){
+    const stateEl = document.getElementById('dpmd-tracking-state');
+    if(!('geolocation' in navigator)){
+      stateEl.textContent = 'Location tracking unavailable on this device';
+      return;
+    }
+    if(this.watchId !== null) return;
+
+    stateEl.textContent = 'Requesting location…';
+    this.watchId = navigator.geolocation.watchPosition(
+      pos => {
+        stateEl.textContent = 'Live location sharing on';
+        // Throttle writes to at most one every 20 seconds.
+        const now = Date.now();
+        if(now - this.lastPing < 20000) return;
+        this.lastPing = now;
+        this.pingLocation(pos.coords.latitude, pos.coords.longitude);
+      },
+      () => { stateEl.textContent = 'Location permission denied — tracking off'; },
+      { enableHighAccuracy: true, maximumAge: 15000, timeout: 20000 }
+    );
+  },
+
+  stopTracking(){
+    if(this.watchId !== null){
+      navigator.geolocation.clearWatch(this.watchId);
+      this.watchId = null;
+    }
+    const el = document.getElementById('dpmd-tracking-state');
+    if(el) el.textContent = '';
+  },
+
+  async pingLocation(lat, lng){
+    if(!this.active) return;
+    const point = `SRID=4326;POINT(${lng} ${lat})`;
+    // Append-only trail for this order, plus the partner's latest position.
+    await supabaseClient.from('delivery_tracking').insert({
+      order_id: this.active.order_id,
+      delivery_partner_id: this.partner.id,
+      location: point
+    });
+    await supabaseClient.from('delivery_partners')
+      .update({ current_location: point }).eq('id', this.partner.id);
+  }
+};
+
+// Shared topbar toggle handler name across delivery pages.
+const DPDashboard = { toggleOnline: (checked) => DPDeliveries.toggleOnline(checked) };
+
+DPDeliveries.init();
+window.addEventListener('beforeunload', () => DPDeliveries.stopTracking());
+</script>
+
+</body>
+</html>
