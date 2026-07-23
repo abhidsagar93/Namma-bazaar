@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delivery Partner Login — Namma Bazar</title>
+<meta name="description" content="Sign in to the Namma Bazar Delivery Partner dashboard to accept and manage deliveries in Sagar, Karnataka.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#16A34A;
+  --green-dark:#0F7A38;
+  --green-light:#E8F6EC;
+  --orange:#F97316;
+  --orange-dark:#DC5F0A;
+  --orange-light:#FFEEE0;
+  --ink:#14231C;
+  --ink-soft:#4B5A52;
+  --mist:#F4F7F5;
+  --mist-deep:#EAF0EC;
+  --line:#E3E9E5;
+  --white:#FFFFFF;
+  --gold:#F5B301;
+
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --radius-pill:999px;
+
+  --shadow-sm:0 2px 8px rgba(20,35,28,0.06);
+  --shadow-md:0 8px 24px rgba(20,35,28,0.10);
+  --shadow-lg:0 20px 48px rgba(20,35,28,0.16);
+
+  --header-h:72px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{max-width:100%;overflow-x:hidden;}
+body{
+  font-family:var(--font-body);color:var(--ink);line-height:1.5;
+  background:var(--white);-webkit-font-smoothing:antialiased;overflow-wrap:break-word;
+  min-height:100vh;display:flex;flex-direction:column;
+}
+a{color:inherit;text-decoration:none;}
+button{font:inherit;cursor:pointer;border:0;background:none;}
+input{font:inherit;color:inherit;}
+img,svg{max-width:100%;}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:4px;}
+
+/* ---------------- topbar — identical pattern to .dash-topbar on the
+   dashboard: sticky, translucent white, blurred, bottom border. Pre-login
+   version only, so no hamburger/toggle/profile — just the brand. --------- */
+.topbar{
+  height:var(--header-h);position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 24px;
+}
+.logo-mark{
+  width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(140deg,var(--green) 0%,var(--green-dark) 100%);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  box-shadow:0 4px 12px rgba(22,163,74,0.35);flex-shrink:0;
+}
+.logo-mark svg{width:22px;height:22px;}
+.tb-name{font-family:var(--font-display);font-size:16px;font-weight:700;line-height:1.2;}
+.tb-tag{font-size:11.5px;color:var(--ink-soft);}
+
+/* ---------------- main ---------------- */
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 20px;background:var(--mist);}
+
+.card{
+  width:100%;max-width:400px;background:var(--white);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-sm);border:1px solid var(--line);padding:34px 30px;
+}
+.card-top{text-align:center;margin-bottom:22px;}
+.card-badge{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:var(--radius-pill);
+  background:var(--green-light);color:var(--green-dark);font-size:11.5px;font-weight:700;
+  letter-spacing:.03em;text-transform:uppercase;margin-bottom:14px;
+}
+.card-badge svg{width:13px;height:13px;}
+.card-top h2{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.015em;margin-bottom:5px;}
+.card-top p{color:var(--ink-soft);font-size:13.5px;}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:15px;}
+.field label{font-size:13px;font-weight:700;color:var(--ink);}
+.field input{
+  width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  font-size:14.5px;background:var(--white);color:var(--ink);
+  transition:border-color .16s ease, box-shadow .16s ease;
+}
+.field input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-light);}
+.field.has-error input{border-color:#D23B3B;}
+.field-error{display:none;color:#C22B2B;font-size:12.5px;margin-top:2px;}
+.field.has-error .field-error{display:block;}
+
+.pw-wrap{position:relative;}
+.pw-wrap input{padding-right:44px;}
+.pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--ink-soft);}
+.pw-toggle:hover{background:var(--mist);}
+.pw-toggle svg{width:18px;height:18px;}
+
+.auth-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0 20px;flex-wrap:wrap;}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-soft);cursor:pointer;}
+.checkbox-row input{width:16px;height:16px;accent-color:var(--green);cursor:pointer;}
+.link-btn{font-size:13px;font-weight:700;color:var(--green-dark);}
+.link-btn:hover{text-decoration:underline;}
+
+.btn-block{width:100%;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 22px;border-radius:var(--radius-pill);font-weight:700;font-size:15px;
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 6px 16px rgba(22,163,74,.24);}
+.btn-primary:hover{background:var(--green-dark);}
+.btn-primary:disabled{opacity:.65;cursor:not-allowed;box-shadow:none;}
+.btn-ghost{background:var(--white);color:var(--ink);border:1.5px solid var(--line);}
+.btn-ghost:hover{background:var(--mist);}
+
+.auth-foot{text-align:center;margin-top:20px;font-size:13.5px;color:var(--ink-soft);}
+.auth-foot a{color:var(--green-dark);font-weight:700;}
+
+.auth-success{text-align:center;padding:8px 4px 4px;}
+.as-ic{width:56px;height:56px;border-radius:50%;background:var(--green-light);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--green-dark);}
+.as-ic svg{width:26px;height:26px;}
+.auth-success h1{font-family:var(--font-display);font-size:19px;margin-bottom:8px;}
+.auth-success p{color:var(--ink-soft);font-size:14px;line-height:1.55;}
+
+.auth-view{display:none;}
+.auth-view.active{display:block;animation:fade .2s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+.error-banner{display:none;align-items:flex-start;gap:9px;background:#FDECEC;color:#A81E1E;
+  padding:11px 13px;border-radius:11px;font-size:13.5px;margin-bottom:16px;line-height:1.45;}
+.error-banner.show{display:flex;}
+.error-banner svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;}
+
+.toast-stack{position:fixed;bottom:24px;right:24px;z-index:300;display:flex;flex-direction:column;gap:10px;}
+.toast{background:var(--ink);color:#fff;padding:13px 18px;border-radius:12px;font-size:13.5px;font-weight:600;
+  display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);animation:toastIn .25s ease;}
+.toast svg{color:var(--green);width:18px;height:18px;flex-shrink:0;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.support-note{text-align:center;padding:16px 20px 28px;font-size:12.5px;color:var(--ink-soft);background:var(--mist);}
+.support-note a{color:var(--green-dark);font-weight:600;}
+
+@media(max-width:480px){
+  .topbar{padding:0 14px;}
+  .main{padding:24px 14px;}
+  .card{padding:26px 20px;}
+  .auth-row{flex-direction:column;align-items:flex-start;gap:10px;}
+}
+@media (pointer:coarse){ .btn,button{min-height:44px;} }
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="2.6"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 8.6c0 4.9-8.8 10.1-8.8 10.1S3.2 13.5 3.2 8.6a4.9 4.9 0 0 1 8.8-3 4.9 4.9 0 0 1 8.8 3Z"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.6 12.6a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.6L21 7H6"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.5 7-2.5 7h17S18 15 18 9Z"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6.5 8-6.5s6.5 2 8 6.5"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l1.5-5h15L21 9"/><path d="M3 9h18v11H3z"/><path d="M9 20v-6h6v6"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l3 6.2 6.8.9-5 4.8 1.2 6.8L12 17.9 5.9 21.2l1.2-6.8-5-4.8 6.8-.9Z"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 12l-8 8-9-9V3h8Z"/><circle cx="7" cy="7" r="1.4"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path d="M2 8h11v9H2z"/><path d="M13 11h4l4 4v2h-8z"/><circle cx="6.5" cy="18.5" r="1.6"/><circle cx="17.5" cy="18.5" r="1.6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2l8 3.5v6c0 5-3.4 8.5-8 10.5-4.6-2-8-5.5-8-10.5v-6Z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-return" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v5h5"/></symbol>
+<symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="5" height="7" rx="2"/><rect x="16.5" y="13" width="5" height="7" rx="2"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5.5-5.5L4 20"/></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24"><path d="M16.3 2.3c.2 1.2-.3 2.4-1 3.2-.8.9-2 1.6-3.2 1.5-.2-1.2.4-2.4 1.1-3.2.8-.9 2.1-1.5 3.1-1.5ZM19.8 17c-.6 1.4-.9 2-1.7 3.2-1.1 1.7-2.6 3.8-4.5 3.8-1.7 0-2.1-1.1-4.4-1.1-2.3 0-2.8 1.1-4.5 1.1-1.9 0-3.3-1.9-4.4-3.6C-1.6 16.6-.7 10 3 10c1.7 0 2.9 1.2 4.4 1.2 1.4 0 2.4-1.2 4.5-1.2 1.4 0 3.6.6 5 2.6-4.4 2.4-3.7 8.4 2.9 4.4Z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M5 3l14 9-14 9Z"/></symbol>
+<symbol id="i-fb" viewBox="0 0 24 24"><path d="M14 9h3V5h-3a4 4 0 0 0-4 4v2H7v4h3v6h4v-6h3l1-4h-4V9a1 1 0 0 1 1-1Z"/></symbol>
+<symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1"/></symbol>
+<symbol id="i-tw" viewBox="0 0 24 24"><path d="M22 5.9c-.7.3-1.5.6-2.3.7a4 4 0 0 0 1.8-2.2 8 8 0 0 1-2.5 1 4 4 0 0 0-6.9 3.6A11.4 11.4 0 0 1 3.8 4.6a4 4 0 0 0 1.3 5.3 4 4 0 0 1-1.8-.5v.1a4 4 0 0 0 3.2 3.9 4 4 0 0 1-1.8.1 4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 17.6a11.3 11.3 0 0 0 6.1 1.8c7.3 0 11.3-6 11.3-11.3v-.5A8 8 0 0 0 22 5.9Z"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+<symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.9 10.9 0 0 1 12 5c7 0 10.5 7 10.5 7a13.4 13.4 0 0 1-3 3.9M6.5 6.6C3.6 8.5 1.5 12 1.5 12S5 19 12 19a10.6 10.6 0 0 0 3.3-.5"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+<symbol id="i-google" viewBox="0 0 24 24"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.4a4.6 4.6 0 0 1-2 3v2.4h3.2c1.9-1.7 3-4.3 3-7.3Z"/><path d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22Z"/><path d="M6.4 14a6 6 0 0 1 0-4v-2.5H3.1a10 10 0 0 0 0 9l3.3-2.5Z"/><path d="M12 5.8c1.5 0 2.8.5 3.8 1.5l2.8-2.8A10 10 0 0 0 3.1 7.5l3.3 2.5C7.2 7.6 9.4 5.8 12 5.8Z"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 2 1 21h22Z"/><path d="M12 9v5"/><circle cx="12" cy="17.3" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="8" r="0.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h13a1 1 0 0 1 1 1v3"/><rect x="3" y="7" width="18" height="13" rx="2"/><circle cx="16.5" cy="13.5" r="1.4"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v8a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol>
+</svg>
+<!-- Topbar — identical pattern to .dash-topbar on the Delivery Dashboard -->
+<header class="topbar">
+  <div class="logo-mark"><svg><use href="#i-truck"/></svg></div>
+  <div>
+    <div class="tb-name">Namma Bazar</div>
+    <div class="tb-tag">Delivery Partner</div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="card">
+
+    <!-- VIEW: LOGIN -->
+    <section class="auth-view active" id="view-login">
+      <div class="card-top">
+        <span class="card-badge"><svg><use href="#i-truck"/></svg> Partner Sign In</span>
+        <h2>Welcome back, rider</h2>
+        <p>Sign in to see today's deliveries.</p>
+      </div>
+
+      <div class="error-banner" id="login-error-banner">
+        <svg><use href="#i-alert"/></svg><span id="login-error-text"></span>
+      </div>
+
+      <form onsubmit="return DPAuth.login(event)" novalidate>
+        <div class="field" id="field-login-email">
+          <label for="login-email">Email address</label>
+          <input id="login-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+          <span class="field-error" id="err-login-email">Enter a valid email address</span>
+        </div>
+
+        <div class="field" id="field-login-password">
+          <label for="login-password">Password</label>
+          <div class="pw-wrap">
+            <input id="login-password" type="password" placeholder="Enter your password"
+                   autocomplete="current-password" required>
+            <button type="button" class="pw-toggle" onclick="DPAuth.togglePw('login-password', this)"
+                    aria-label="Show password">
+              <svg class="icon icon-sm"><use href="#i-eye"/></svg>
+            </button>
+          </div>
+          <span class="field-error" id="err-login-password">Password is required</span>
+        </div>
+
+        <div class="auth-row">
+          <label class="checkbox-row"><input type="checkbox" id="login-remember"> <span>Keep me signed in</span></label>
+          <button type="button" class="link-btn" onclick="DPAuth.showView('forgot')">Forgot password?</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="login-submit">Sign In</button>
+      </form>
+
+      <p class="auth-foot">New delivery partner? <a href="delivery-register.html">Apply to join</a></p>
+    </section>
+
+    <!-- VIEW: FORGOT PASSWORD -->
+    <section class="auth-view" id="view-forgot">
+      <div class="card-top">
+        <span class="card-badge"><svg><use href="#i-truck"/></svg> Partner Sign In</span>
+        <h2>Reset your password</h2>
+        <p>We'll email you a secure link to set a new one.</p>
+      </div>
+
+      <form onsubmit="return DPAuth.sendReset(event)" novalidate>
+        <div class="field" id="field-forgot-email">
+          <label for="forgot-email">Email address</label>
+          <input id="forgot-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+          <span class="field-error" id="err-forgot-email">Enter a valid email address</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="forgot-submit">Send Reset Link</button>
+      </form>
+      <p class="auth-foot"><button type="button" class="link-btn" onclick="DPAuth.showView('login')">Back to sign in</button></p>
+    </section>
+
+    <!-- VIEW: RESET SENT -->
+    <section class="auth-view" id="view-sent">
+      <div class="auth-success">
+        <div class="as-ic"><svg><use href="#i-check"/></svg></div>
+        <h1>Check your email</h1>
+        <p>If an account exists for that address, a password reset link is on its way.</p>
+        <button type="button" class="btn btn-ghost btn-block" style="margin-top:20px" onclick="DPAuth.showView('login')">Back to sign in</button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<p class="support-note">Need help? <a href="https://wa.me/919731674173" target="_blank" rel="noopener">WhatsApp Support</a> · +91 97316 74173</p>
+
+<div class="toast-stack" id="toast-stack"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+/* Catches the case where supabase-client.js itself failed to load (404 —
+   commonly it was not uploaded, or sits in a different folder). Without this,
+   the first use of supabaseClient reports "not defined" and points at the
+   wrong line entirely. */
+if (typeof supabaseClient === 'undefined') {
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('div');
+    b.setAttribute('role', 'alert');
+    b.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:99999;background:#B01212;' +
+      'color:#fff;padding:14px 18px;font:14px/1.5 Inter,Arial,sans-serif';
+    b.innerHTML = '<strong>Setup problem: supabase-client.js did not load.</strong><br>' +
+      '<span style="font-size:13px">Make sure <code>supabase-client.js</code> sits in the same ' +
+      'folder as this page and was uploaded with it. Open DevTools \u2192 Network to confirm it is not a 404.</span>';
+    document.body.appendChild(b);
+  });
+  console.error('[Namma Bazar] supabase-client.js did not load - check the file path and that it was uploaded.');
+}
+</script>
+<script>
+function svgUse(id, cls='icon'){ return `<svg class="${cls}"><use href="#${id}"/></svg>`; }
+
+const Toast = {
+  show(msg, icon='i-check'){
+    let stack = document.getElementById('toast-stack');
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = `${svgUse(icon)}<span>${msg}</span>`;
+    stack.appendChild(el);
+    setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; el.style.transition='all .25s'; setTimeout(()=>el.remove(),260); }, 2600);
+  }
+};
+
+const DPAuth = {
+  showView(name){
+    document.querySelectorAll('.auth-view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.getElementById('login-error-banner').classList.remove('show');
+  },
+
+  togglePw(id, btn){
+    const input = document.getElementById(id);
+    const showing = input.type === 'text';
+    input.type = showing ? 'password' : 'text';
+    btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+  },
+
+  showError(message){
+    document.getElementById('login-error-text').textContent = message;
+    document.getElementById('login-error-banner').classList.add('show');
+  },
+
+  async login(e){
+    e.preventDefault();
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const btn = document.getElementById('login-submit');
+
+    document.getElementById('login-error-banner').classList.remove('show');
+    if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ document.getElementById('err-login-email').classList.add('show'); return false; }
+    document.getElementById('err-login-email').classList.remove('show');
+    if(!password){ document.getElementById('err-login-password').classList.add('show'); return false; }
+    document.getElementById('err-login-password').classList.remove('show');
+
+    btn.disabled = true; btn.textContent = 'Signing in...';
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if(error){
+      btn.disabled = false; btn.textContent = 'Sign In';
+      this.showError('Those credentials did not match an account.');
+      return false;
+    }
+
+    // Confirm this account is actually a delivery partner, and check approval state.
+    const { data: partner } = await supabaseClient
+      .from('delivery_partners')
+      .select('id, documents_status')
+      .eq('profile_id', data.user.id)
+      .maybeSingle();
+
+    if(!partner){
+      await supabaseClient.auth.signOut();
+      btn.disabled = false; btn.textContent = 'Sign In';
+      this.showError('This account is not registered as a delivery partner.');
+      return false;
+    }
+
+    if(partner.documents_status === 'rejected'){
+      await supabaseClient.auth.signOut();
+      btn.disabled = false; btn.textContent = 'Sign In';
+      this.showError('Your application was not approved. Please contact support.');
+      return false;
+    }
+
+    if(partner.documents_status === 'pending'){
+      // Not blocked from signing in — the dashboard shows a clear pending state
+      // rather than pretending the account is fully active.
+      Toast.show('Your application is still under review', 'i-clock');
+    }
+
+    window.location.href = 'delivery-dashboard.html';
+    return false;
+  },
+
+  async sendReset(e){
+    e.preventDefault();
+    const email = document.getElementById('forgot-email').value.trim();
+    const btn = document.getElementById('forgot-submit');
+    if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ document.getElementById('err-forgot-email').classList.add('show'); return false; }
+    document.getElementById('err-forgot-email').classList.remove('show');
+
+    btn.disabled = true; btn.textContent = 'Sending...';
+    await supabaseClient.auth.resetPasswordForEmail(email);
+    btn.disabled = false; btn.textContent = 'Send Reset Link';
+    this.showView('sent');
+    return false;
+  }
+};
+
+// If already signed in as a delivery partner, skip the form.
+(async function(){
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if(session){
+    const { data: partner } = await supabaseClient
+      .from('delivery_partners').select('id').eq('profile_id', session.user.id).maybeSingle();
+    if(partner) window.location.href = 'delivery-dashboard.html';
+  }
+})();
+</script>
+</body>
+</html>

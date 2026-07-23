@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign In — Namma Bazar</title>
+<meta name="description" content="Sign in to Namma Bazar — shop from local stores in Sagar, Karnataka with same-day delivery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#16A34A;
+  --green-dark:#0F7A38;
+  --green-light:#E8F6EC;
+  --orange:#F97316;
+  --orange-dark:#DC5F0A;
+  --orange-light:#FFEEE0;
+  --ink:#14231C;
+  --ink-soft:#4B5A52;
+  --mist:#F4F7F5;
+  --mist-deep:#EAF0EC;
+  --line:#E3E9E5;
+  --white:#FFFFFF;
+  --gold:#F5B301;
+
+  --font-display:'Sora',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --radius-pill:999px;
+
+  --shadow-sm:0 2px 8px rgba(20,35,28,0.06);
+  --shadow-md:0 8px 24px rgba(20,35,28,0.10);
+  --shadow-lg:0 20px 48px rgba(20,35,28,0.16);
+
+  --header-h:72px;
+  --nav-h:48px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{max-width:100%;overflow-x:hidden;}
+body{font-family:var(--font-body);color:var(--ink);line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-wrap:break-word;
+  background:linear-gradient(150deg,#0E7A38 0%,#16A34A 40%,#0F8A3E 100%);
+  padding:18px;min-height:100vh;display:flex;flex-direction:column;}
+a{color:inherit;text-decoration:none;}
+button{font:inherit;cursor:pointer;border:0;background:none;}
+input{font:inherit;color:inherit;}
+img,svg{max-width:100%;}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:4px;}
+
+/* ---------------- shell ---------------- */
+.shell{width:100%;max-width:1320px;margin:0 auto;background:var(--white);
+  border-radius:26px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.22);flex:1;
+  display:flex;flex-direction:column;}
+
+/* ---------------- top bar ---------------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:16px 30px;border-bottom:1px solid var(--line);background:#FBFDFB;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-mark{width:44px;height:44px;border-radius:13px;
+  background:linear-gradient(150deg,var(--green),var(--green-dark));
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 5px 14px rgba(22,163,74,.3);}
+.brand-mark svg{width:24px;height:24px;color:#fff;}
+.brand-name{font-family:var(--font-display);font-size:24px;font-weight:800;
+  letter-spacing:-.02em;color:var(--green-dark);line-height:1.1;}
+.brand-tag{font-size:12.5px;color:var(--ink-soft);}
+.feats{display:flex;align-items:center;gap:26px;}
+.feat{display:flex;align-items:center;gap:9px;}
+.feat-ic{width:30px;height:30px;border-radius:9px;background:var(--green-light);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.feat-ic svg{width:16px;height:16px;color:var(--green-dark);}
+.feat b{display:block;font-size:12.5px;font-weight:600;line-height:1.25;}
+.feat span{font-size:11.5px;color:var(--ink-soft);}
+
+/* ---------------- main ---------------- */
+.main{display:grid;grid-template-columns:1.08fr .92fr;gap:0;flex:1;position:relative;}
+
+/* left */
+.left{position:relative;padding:44px 40px;display:flex;flex-direction:column;
+  background:linear-gradient(170deg,#F2FAF4 0%,#FFFFFF 62%);overflow:hidden;}
+.left::before{content:'';position:absolute;top:-90px;left:-70px;width:300px;height:300px;
+  border-radius:50%;background:rgba(22,163,74,.06);}
+.left > *{position:relative;z-index:2;}
+.left h1{font-family:var(--font-display);font-size:clamp(30px,3.3vw,44px);font-weight:800;
+  line-height:1.08;letter-spacing:-.028em;margin-bottom:14px;}
+.left h1 .g{color:var(--green);display:block;}
+.left .lede{font-size:15.5px;color:var(--ink-soft);max-width:44ch;margin-bottom:22px;}
+.pills{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:26px;}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:9px 15px;border-radius:999px;
+  background:var(--white);border:1px solid var(--line);font-size:13px;font-weight:600;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);}
+.pill svg{width:16px;height:16px;color:var(--green);}
+.shot{border-radius:18px;overflow:hidden;box-shadow:0 16px 38px rgba(0,0,0,.13);margin-top:auto;}
+.shot img{width:100%;height:auto;display:block;}
+
+/* right */
+.right{padding:40px 44px;display:flex;align-items:center;justify-content:center;
+  background:var(--mist);}
+.card{width:100%;max-width:392px;background:var(--white);border-radius:20px;
+  padding:32px 30px;box-shadow:0 14px 40px rgba(0,0,0,.10);}
+.card-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px;}
+.card-brand .brand-mark{width:38px;height:38px;border-radius:11px;}
+.card-brand .brand-mark svg{width:21px;height:21px;}
+.card-brand .brand-name{font-size:20px;}
+.card-brand .brand-tag{font-size:11px;}
+.card-top{margin-bottom:20px;}
+.card-top h2{font-family:var(--font-display);font-size:24px;font-weight:800;
+  letter-spacing:-.02em;margin-bottom:5px;}
+.card-top p{color:var(--ink-soft);font-size:14px;}
+
+/* tabs */
+.tabs{display:flex;gap:4px;background:var(--mist);padding:4px;border-radius:12px;margin-bottom:20px;}
+.tab{flex:1;padding:9px 0;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--ink-soft);
+  transition:background .18s ease,color .18s ease;}
+.tab.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+
+/* fields */
+.f{margin-bottom:14px;}
+.f label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;}
+.wrap{position:relative;}
+.inp{width:100%;padding:12px 42px 12px 14px;border:1.5px solid var(--line);border-radius:12px;
+  font-size:14.5px;background:var(--white);transition:border-color .16s ease,box-shadow .16s ease;}
+.inp:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-light);}
+.inp.bad{border-color:#D23B3B;}
+.f-ic{position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  width:18px;height:18px;color:var(--ink-soft);pointer-events:none;}
+.pw-eye{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:31px;height:31px;
+  display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--ink-soft);}
+.pw-eye:hover{background:var(--mist);}
+.pw-eye svg{width:18px;height:18px;}
+.err{display:none;color:#C22B2B;font-size:12.5px;margin-top:5px;}
+.err.on{display:block;}
+
+/* roles */
+.roles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.role{border:1.5px solid var(--line);border-radius:12px;padding:11px 6px;text-align:center;background:#fff;
+  transition:border-color .16s ease,background .16s ease;}
+.role svg{width:19px;height:19px;color:var(--ink-soft);margin-bottom:4px;}
+.role b{display:block;font-size:12px;font-weight:600;}
+.role.on{border-color:var(--green);background:var(--green-light);}
+.role.on svg{color:var(--green-dark);}
+
+.row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;}
+.check{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);cursor:pointer;}
+.check input{width:15px;height:15px;accent-color:var(--green);cursor:pointer;}
+.link{font-size:13px;color:var(--green-dark);font-weight:600;}
+.link:hover{text-decoration:underline;}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  padding:13px 20px;border-radius:12px;font-weight:600;font-size:14.5px;
+  transition:transform .14s ease,box-shadow .14s ease,background .14s ease;}
+.btn:active{transform:translateY(1px);}
+.btn-main{background:var(--green-dark);color:#fff;box-shadow:0 6px 16px rgba(15,122,56,.26);}
+.btn-main:hover{background:#0C6A31;}
+.btn-main:disabled{opacity:.6;cursor:not-allowed;box-shadow:none;}
+.btn-social{background:#fff;color:var(--ink);border:1.5px solid var(--line);margin-bottom:9px;font-size:14px;}
+.btn-social:hover:not(:disabled){background:var(--mist);}
+.btn-social:disabled{opacity:.55;cursor:not-allowed;}
+.btn-social svg{width:18px;height:18px;}
+
+.sep{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--ink-soft);font-size:12px;font-weight:600;}
+.sep::before,.sep::after{content:'';flex:1;height:1px;background:var(--line);}
+.social-note{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:6px;}
+.foot{text-align:center;margin-top:18px;font-size:13.5px;color:var(--ink-soft);}
+.foot a{color:var(--green-dark);font-weight:600;}
+
+/* alert */
+.alert{display:none;gap:9px;padding:11px 13px;border-radius:11px;font-size:13.5px;
+  margin-bottom:15px;align-items:flex-start;line-height:1.45;}
+.alert.on{display:flex;}
+.alert svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;}
+.alert-bad{background:#FDECEC;color:#A81E1E;}
+.alert-ok{background:var(--green-light);color:var(--green-dark);}
+.alert-info{background:#EAF1FB;color:#1B4E93;}
+
+/* trust strip + footer */
+.trust{display:flex;align-items:center;justify-content:center;gap:52px;flex-wrap:wrap;
+  padding:16px 30px;border-top:1px solid var(--line);background:#FBFDFB;}
+.tr{display:flex;align-items:center;gap:10px;}
+.tr svg{width:19px;height:19px;color:var(--green);flex-shrink:0;}
+.tr b{display:block;font-size:12.5px;font-weight:600;line-height:1.25;}
+.tr span{font-size:11.5px;color:var(--ink-soft);}
+.copy{text-align:center;color:rgba(255,255,255,.9);font-size:12.5px;padding:14px 10px 4px;}
+
+/* states */
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;
+  border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.done{text-align:center;padding:16px 0;}
+.done-ring{width:64px;height:64px;border-radius:50%;background:var(--green-light);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 15px;
+  animation:pop .34s cubic-bezier(.2,.9,.3,1.3);}
+.done-ring svg{width:31px;height:31px;color:var(--green-dark);
+  stroke-dasharray:32;stroke-dashoffset:32;animation:draw .45s .16s ease forwards;}
+@keyframes pop{0%{transform:scale(.5);opacity:0;}100%{transform:scale(1);opacity:1;}}
+@keyframes draw{to{stroke-dashoffset:0;}}
+.done h3{font-family:var(--font-display);font-size:19px;margin-bottom:6px;}
+.done p{color:var(--ink-soft);font-size:14px;}
+.view{display:none;}
+.view.on{display:block;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+/* ---------------- responsive ---------------- */
+@media(max-width:1080px){
+  .feats{gap:16px;}
+  .feat span{display:none;}
+  .left{padding:36px 30px;}
+  .right{padding:32px 28px;}
+}
+@media(max-width:900px){
+  body{padding:10px;}
+  .shell{border-radius:20px;}
+  .top{padding:14px 20px;gap:14px;}
+  .feats{display:none;}
+  .main{grid-template-columns:1fr;}
+  .left{order:2;padding:30px 22px;}
+  .left h1{font-size:27px;}
+  .shot{margin-top:22px;}
+  .right{order:1;padding:26px 18px;}
+  .trust{gap:22px;padding:14px 18px;}
+  .tr span{display:none;}
+}
+@media(max-width:430px){
+  .roles{grid-template-columns:1fr;}
+  .card{padding:24px 20px;}
+  .pills{gap:7px;}
+  .pill{font-size:12px;padding:8px 12px;}
+  .trust{gap:16px;}
+  .tr b{font-size:11.5px;}
+}
+@media (pointer:coarse){ .btn,button{min-height:44px;} }
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+}
+</style>
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 4.5 4h15L21 9.5"/><path d="M3 9.5h18v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5z"/><path d="M8 21v-6h8v6"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 5.2A9.9 9.9 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3 3.9M6.2 6.2A17 17 0 0 0 2 12s3.6 7 10 7a9.9 9.9 0 0 0 4.2-.9"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/><path d="m2 2 20 20"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 7"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5"/><circle cx="12" cy="16.3" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16.5V11"/><circle cx="12" cy="8" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5h11v10H2z"/><path d="M13 10h4l3 3v3.5h-7z"/><circle cx="6" cy="18.5" r="1.8"/><circle cx="17" cy="18.5" r="1.8"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.3 2.9 7.6 7 9 4.1-1.4 7-4.7 7-9V6Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 13.5 12 22 2 12V3.5H10Z"/><circle cx="7" cy="8" r="1.6"/></symbol>
+  <symbol id="i-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.5" y="13" width="4.5" height="6.5" rx="1.8"/><rect x="17" y="13" width="4.5" height="6.5" rx="1.8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-9.6A4.4 4.4 0 0 1 12 7.8a4.4 4.4 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20Z"/></symbol>
+  <symbol id="i-google" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.7-.06-1.4-.18-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5a6 6 0 0 1-9-3.1H3.1v2.6A10 10 0 0 0 12 22z"/><path fill="#FBBC05" d="M6.4 14a6 6 0 0 1 0-3.8V7.6H3.1a10 10 0 0 0 0 8.9z"/><path fill="#EA4335" d="M12 6a5.4 5.4 0 0 1 3.8 1.5l2.8-2.8A9.6 9.6 0 0 0 12 2a10 10 0 0 0-8.9 5.5l3.3 2.6A6 6 0 0 1 12 6z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.5 18.5h3"/></symbol>
+</svg>
+
+<div class="shell">
+
+  <!-- ================= TOP BAR ================= -->
+  <header class="top">
+    <div class="brand">
+      <div class="brand-mark"><svg><use href="#i-store"/></svg></div>
+      <div>
+        <div class="brand-name">Namma Bazar</div>
+        <div class="brand-tag">Shop Local. Get It Today.</div>
+      </div>
+    </div>
+
+    <div class="feats">
+      <div class="feat">
+        <div class="feat-ic"><svg><use href="#i-store"/></svg></div>
+        <div><b>Local Stores</b><span>Right here in Sagar</span></div>
+      </div>
+      <div class="feat">
+        <div class="feat-ic"><svg><use href="#i-grid"/></svg></div>
+        <div><b>Everyday Needs</b><span>Groceries and more</span></div>
+      </div>
+      <div class="feat">
+        <div class="feat-ic"><svg><use href="#i-tag"/></svg></div>
+        <div><b>Fair Prices</b><span>Straight from the shop</span></div>
+      </div>
+      <div class="feat">
+        <div class="feat-ic"><svg><use href="#i-clock"/></svg></div>
+        <div><b>Same-Day Delivery</b><span>To your door</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+
+    <!-- left -->
+    <section class="left">
+      <h1>Shop Local.<span class="g">Get It Today.</span></h1>
+      <p class="lede">Order from verified stores across Sagar and have it delivered the same day.</p>
+
+      <div class="pills">
+        <span class="pill"><svg><use href="#i-heart"/></svg> Local First</span>
+        <span class="pill"><svg><use href="#i-shield"/></svg> Verified Stores</span>
+        <span class="pill"><svg><use href="#i-truck"/></svg> Same-Day</span>
+      </div>
+
+      <div class="shot">
+        <picture>
+          <source media="(max-width: 640px)" srcset="hero-groceries-mobile.jpg">
+          <img src="hero-groceries.jpg" width="1400" height="933" loading="eager" decoding="async"
+               alt="Groceries, produce and everyday essentials available from local Namma Bazar stores">
+        </picture>
+      </div>
+    </section>
+
+    <!-- right -->
+    <section class="right">
+      <div class="card">
+
+        <div class="card-brand">
+          <div class="brand-mark"><svg><use href="#i-store"/></svg></div>
+          <div>
+            <div class="brand-name">Namma Bazar</div>
+            <div class="brand-tag">Shop Local. Get It Today.</div>
+          </div>
+        </div>
+
+        <div class="tabs" id="tabs">
+          <button class="tab on" id="tab-in" onclick="Auth.view('in')">Sign In</button>
+          <button class="tab" id="tab-up" onclick="Auth.view('up')">Create Account</button>
+        </div>
+
+        <div class="alert" id="alert" role="alert"><svg><use href="#i-alert"/></svg><span id="alert-txt"></span></div>
+
+        <!-- SIGN IN -->
+        <div class="view on" id="v-in">
+          <div class="card-top">
+            <h2>Welcome back</h2>
+            <p>Sign in to continue shopping locally.</p>
+          </div>
+
+          <div class="f">
+            <label for="in-email">Email address</label>
+            <div class="wrap">
+              <input class="inp" id="in-email" type="email" autocomplete="email" placeholder="Enter your email">
+              <svg class="f-ic"><use href="#i-user"/></svg>
+            </div>
+            <div class="err" id="in-email-e">Please enter a valid email address.</div>
+          </div>
+
+          <div class="f">
+            <label for="in-pw">Password</label>
+            <div class="wrap">
+              <input class="inp" id="in-pw" type="password" autocomplete="current-password" placeholder="Enter your password">
+              <button class="pw-eye" type="button" aria-label="Show password" onclick="Auth.eye('in-pw',this)">
+                <svg><use href="#i-eye"/></svg>
+              </button>
+            </div>
+            <div class="err" id="in-pw-e">Please enter your password.</div>
+          </div>
+
+          <div class="row-between">
+            <label class="check"><input type="checkbox" id="in-remember" checked> Remember me</label>
+            <a href="#" class="link" onclick="Auth.view('fp');return false;">Forgot Password?</a>
+          </div>
+
+          <button class="btn btn-main" id="in-btn" onclick="Auth.signIn()">Login</button>
+
+          <div class="sep">OR</div>
+          <button class="btn btn-social" disabled title="Not configured yet"><svg><use href="#i-google"/></svg> Continue with Google</button>
+          <button class="btn btn-social" disabled title="Not configured yet"><svg><use href="#i-phone"/></svg> Continue with Phone</button>
+          <p class="social-note">Google and phone sign-in aren't enabled yet.</p>
+
+          <p class="foot">Don't have an account? <a href="#" onclick="Auth.view('up');return false;">Sign Up</a></p>
+        </div>
+
+        <!-- SIGN UP -->
+        <div class="view" id="v-up">
+          <div class="card-top">
+            <h2>Create your account</h2>
+            <p>One account for shopping, selling, or delivering.</p>
+          </div>
+
+          <div class="f">
+            <label>I want to join as</label>
+            <div class="roles" id="roles">
+              <button class="role on" data-role="customer" onclick="Auth.role('customer')"><svg><use href="#i-user"/></svg><b>Customer</b></button>
+              <button class="role" data-role="seller" onclick="Auth.role('seller')"><svg><use href="#i-store"/></svg><b>Seller</b></button>
+              <button class="role" data-role="delivery_partner" onclick="Auth.role('delivery_partner')"><svg><use href="#i-truck"/></svg><b>Delivery</b></button>
+            </div>
+          </div>
+
+          <div class="alert alert-info on" id="role-note" style="margin-bottom:14px">
+            <svg><use href="#i-info"/></svg><span id="role-note-txt"></span>
+          </div>
+
+          <div class="f">
+            <label for="up-name">Full name</label>
+            <div class="wrap">
+              <input class="inp" id="up-name" type="text" autocomplete="name" placeholder="Your full name">
+              <svg class="f-ic"><use href="#i-user"/></svg>
+            </div>
+            <div class="err" id="up-name-e">Please enter your name.</div>
+          </div>
+
+          <div class="f">
+            <label for="up-email">Email address</label>
+            <div class="wrap">
+              <input class="inp" id="up-email" type="email" autocomplete="email" placeholder="you@example.com">
+              <svg class="f-ic"><use href="#i-user"/></svg>
+            </div>
+            <div class="err" id="up-email-e">Please enter a valid email address.</div>
+          </div>
+
+          <div class="f">
+            <label for="up-phone">Mobile number</label>
+            <div class="wrap">
+              <input class="inp" id="up-phone" type="tel" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit mobile number">
+              <svg class="f-ic"><use href="#i-phone"/></svg>
+            </div>
+            <div class="err" id="up-phone-e">Enter a valid 10-digit Indian mobile number.</div>
+          </div>
+
+          <div class="f">
+            <label for="up-pw">Password</label>
+            <div class="wrap">
+              <input class="inp" id="up-pw" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+              <button class="pw-eye" type="button" aria-label="Show password" onclick="Auth.eye('up-pw',this)">
+                <svg><use href="#i-eye"/></svg>
+              </button>
+            </div>
+            <div class="err" id="up-pw-e">Password must be at least 8 characters.</div>
+          </div>
+
+          <button class="btn btn-main" id="up-btn" onclick="Auth.signUp()">Create Account</button>
+          <p class="foot">Already have an account? <a href="#" onclick="Auth.view('in');return false;">Sign in</a></p>
+        </div>
+
+        <!-- FORGOT PASSWORD -->
+        <div class="view" id="v-fp">
+          <div class="card-top">
+            <h2>Reset your password</h2>
+            <p>We'll email you a secure link to set a new one.</p>
+          </div>
+          <div class="f">
+            <label for="fp-email">Email address</label>
+            <div class="wrap">
+              <input class="inp" id="fp-email" type="email" autocomplete="email" placeholder="you@example.com">
+              <svg class="f-ic"><use href="#i-user"/></svg>
+            </div>
+            <div class="err" id="fp-email-e">Please enter a valid email address.</div>
+          </div>
+          <button class="btn btn-main" id="fp-btn" onclick="Auth.reset()">Send Reset Link</button>
+          <p class="foot"><a href="#" onclick="Auth.view('in');return false;">Back to sign in</a></p>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="view" id="v-done">
+          <div class="done">
+            <div class="done-ring"><svg fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="m4 12.5 5.5 5.5L20 7"/></svg></div>
+            <h3 id="done-t">Signed in</h3>
+            <p id="done-p">Taking you to your dashboard…</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= TRUST STRIP ================= -->
+  <div class="trust">
+    <div class="tr"><svg><use href="#i-heart"/></svg><div><b>100% Local</b><span>Stores from Sagar</span></div></div>
+    <div class="tr"><svg><use href="#i-shield"/></svg><div><b>Secure &amp; Safe</b><span>Your data is protected</span></div></div>
+    <div class="tr"><svg><use href="#i-headset"/></svg><div><b>We're Here</b><span>Support on WhatsApp</span></div></div>
+  </div>
+
+</div>
+
+<p class="copy">© <span id="year"></span> Namma Bazar · Sagar, Karnataka</p>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-client.js"></script>
+<script>
+if (typeof supabaseClient === 'undefined') {
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('div');
+    b.setAttribute('role','alert');
+    b.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#B01212;color:#fff;padding:14px 18px;font:14px/1.5 Inter,Arial,sans-serif';
+    b.innerHTML='<strong>Setup problem: supabase-client.js did not load.</strong>';
+    document.body.appendChild(b);
+  });
+}
+</script>
+<script>
+
+/* ============================================================================
+   NAMMA BAZAR — AUTHENTICATION
+
+   Role resolution note. public.user_roles has SELECT policies only — there is
+   no INSERT policy, by design, so a user cannot grant themselves a role from
+   the browser. That also means 'seller' and 'delivery_partner' rows are never
+   written by the app. Role is therefore derived from the tables that DO get
+   populated, each readable by the owner under existing RLS:
+
+     admin            -> user_roles (role = 'admin')
+     seller           -> store_staff (profile_id = auth.uid())
+     delivery_partner -> delivery_partners (profile_id = auth.uid())
+     customer         -> everyone else
+
+   No schema, SQL or RLS change is involved.
+============================================================================ */
+
+const ROLE_NOTES = {
+  customer:         'Shop from local stores and get same-day delivery.',
+  seller:           "After signing up you'll be taken to store registration. Your store goes live once an admin approves it.",
+  delivery_partner: "After signing up you'll complete partner registration. You can start delivering once approved."
+};
+
+const Auth = {
+  chosenRole: 'customer',
+  busy: false,
+
+  init(){
+    this.role('customer');
+    // If a session already exists, don't make the user sign in again.
+    supabaseClient.auth.getSession().then(({ data }) => {
+      if(data && data.session) this.routeTo(data.session.user.id, true);
+    });
+    // Enter key submits the visible view.
+    document.addEventListener('keydown', e => {
+      if(e.key !== 'Enter') return;
+      if(document.getElementById('v-in').classList.contains('on')) this.signIn();
+      else if(document.getElementById('v-up').classList.contains('on')) this.signUp();
+      else if(document.getElementById('v-fp').classList.contains('on')) this.reset();
+    });
+  },
+
+  view(name){
+    ['in','up','fp','done'].forEach(v => {
+      document.getElementById('v-' + v).classList.toggle('on', v === name);
+    });
+    document.getElementById('tabs').style.display = (name === 'in' || name === 'up') ? 'flex' : 'none';
+    document.getElementById('tab-in').classList.toggle('on', name === 'in');
+    document.getElementById('tab-up').classList.toggle('on', name === 'up');
+    this.hideAlert();
+  },
+
+  role(r){
+    this.chosenRole = r;
+    document.querySelectorAll('.role').forEach(b => b.classList.toggle('on', b.dataset.role === r));
+    document.getElementById('role-note-txt').textContent = ROLE_NOTES[r];
+  },
+
+  eye(id, btn){
+    const el = document.getElementById(id);
+    const show = el.type === 'password';
+    el.type = show ? 'text' : 'password';
+    btn.querySelector('use').setAttribute('href', show ? '#i-eye-off' : '#i-eye');
+    btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+  },
+
+  alert(msg, kind){
+    const a = document.getElementById('alert');
+    a.className = 'alert on alert-' + (kind || 'bad');
+    a.querySelector('use').setAttribute('href', kind === 'ok' ? '#i-check' : kind === 'info' ? '#i-info' : '#i-alert');
+    document.getElementById('alert-txt').textContent = msg;
+    a.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  },
+  hideAlert(){ document.getElementById('alert').classList.remove('on'); },
+
+  field(id, ok){
+    document.getElementById(id).classList.toggle('bad', !ok);
+    document.getElementById(id + '-e').classList.toggle('on', !ok);
+    return ok;
+  },
+
+  loading(btnId, on, label){
+    const b = document.getElementById(btnId);
+    b.disabled = on;
+    b.innerHTML = on ? '<span class="spin"></span> ' + label : label;
+  },
+
+  /* ---------------------------------------------------------------- SIGN IN */
+  async signIn(){
+    if(this.busy) return;
+    this.hideAlert();
+    const email = document.getElementById('in-email').value.trim();
+    const pw = document.getElementById('in-pw').value;
+
+    let ok = this.field('in-email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+    ok = this.field('in-pw', pw.length > 0) && ok;
+    if(!ok) return;
+
+    this.busy = true;
+    this.loading('in-btn', true, 'Signing in…');
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: pw });
+      if(error) throw error;
+      await this.routeTo(data.user.id, false);
+    } catch(err){
+      this.alert(this.readable(err), 'bad');
+      console.error('[Namma Bazar] Sign-in failed >', 'message:', err.message,
+                    '| status:', err.status, '| code:', err.code);
+      this.loading('in-btn', false, 'Sign In');
+      this.busy = false;
+    }
+  },
+
+  /* ---------------------------------------------------------------- SIGN UP */
+  async signUp(){
+    if(this.busy) return;
+    this.hideAlert();
+    const name = document.getElementById('up-name').value.trim();
+    const email = document.getElementById('up-email').value.trim();
+    const phone = document.getElementById('up-phone').value.trim();
+    const pw = document.getElementById('up-pw').value;
+
+    let ok = this.field('up-name', name.length >= 2);
+    ok = this.field('up-email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) && ok;
+    ok = this.field('up-phone', /^[6-9]\d{9}$/.test(phone)) && ok;
+    ok = this.field('up-pw', pw.length >= 8) && ok;
+    if(!ok) return;
+
+    this.busy = true;
+    this.loading('up-btn', true, 'Creating account…');
+    try {
+      /* The signup trigger (migration 0015) creates the profiles row and
+         grants the baseline 'customer' role. Sellers and delivery partners
+         then complete their own registration, which is what actually marks
+         them as such. Nothing here writes to user_roles. */
+      const { data, error } = await supabaseClient.auth.signUp({
+        email, password: pw,
+        options: { data: { full_name: name, phone: phone } }
+      });
+      if(error) throw error;
+
+      if(!data.session){
+        // Email confirmation is switched on for this project.
+        this.view('done');
+        document.getElementById('done-t').textContent = 'Check your email';
+        document.getElementById('done-p').textContent =
+          'We sent a confirmation link to ' + email + '. Open it, then sign in.';
+        this.busy = false;
+        return;
+      }
+
+      // Send them where their chosen role needs to go next.
+      const next = this.chosenRole === 'seller' ? 'register.html'
+                 : this.chosenRole === 'delivery_partner' ? 'delivery-register.html'
+                 : 'index.html';
+      this.view('done');
+      document.getElementById('done-t').textContent = 'Account created';
+      document.getElementById('done-p').textContent =
+        this.chosenRole === 'customer' ? 'Taking you to Namma Bazar…' : 'Taking you to registration…';
+      setTimeout(() => { window.location.href = next; }, 1100);
+
+    } catch(err){
+      this.alert(this.readable(err), 'bad');
+      console.error('[Namma Bazar] Sign-up failed >', 'message:', err.message, '| code:', err.code);
+      this.loading('up-btn', false, 'Create Account');
+      this.busy = false;
+    }
+  },
+
+  /* -------------------------------------------------------- FORGOT PASSWORD */
+  async reset(){
+    if(this.busy) return;
+    this.hideAlert();
+    const email = document.getElementById('fp-email').value.trim();
+    if(!this.field('fp-email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) return;
+
+    this.busy = true;
+    this.loading('fp-btn', true, 'Sending…');
+    try {
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + window.location.pathname.replace(/[^/]*$/, '') + 'login.html'
+      });
+      if(error) throw error;
+      this.view('done');
+      document.getElementById('done-t').textContent = 'Check your email';
+      document.getElementById('done-p').textContent =
+        'If an account exists for ' + email + ', a reset link is on its way.';
+    } catch(err){
+      this.alert(this.readable(err), 'bad');
+      this.loading('fp-btn', false, 'Send Reset Link');
+    }
+    this.busy = false;
+  },
+
+  /* --------------------------------------------- ROLE DETECTION + REDIRECT */
+  async resolveRole(userId){
+    // Admin takes precedence — highest privilege wins.
+    try {
+      const { data } = await supabaseClient.from('user_roles')
+        .select('role').eq('profile_id', userId).eq('role', 'admin').maybeSingle();
+      if(data) return 'admin';
+    } catch(e){ console.warn('[Namma Bazar] admin check failed', e); }
+
+    try {
+      const { data } = await supabaseClient.from('store_staff')
+        .select('store_id').eq('profile_id', userId).limit(1).maybeSingle();
+      if(data) return 'seller';
+    } catch(e){ console.warn('[Namma Bazar] seller check failed', e); }
+
+    try {
+      const { data } = await supabaseClient.from('delivery_partners')
+        .select('id').eq('profile_id', userId).maybeSingle();
+      if(data) return 'delivery_partner';
+    } catch(e){ console.warn('[Namma Bazar] partner check failed', e); }
+
+    return 'customer';
+  },
+
+  async routeTo(userId, silent){
+    const role = await this.resolveRole(userId);
+    const dest = {
+      admin:            'admin-dashboard.html',
+      seller:           'seller-dashboard.html',
+      delivery_partner: 'delivery-dashboard.html',
+      customer:         'index.html'
+    }[role];
+
+    // Honour ?next= so route protection can send people back where they were.
+    const next = new URLSearchParams(window.location.search).get('next');
+    const target = next && /^[\w-]+\.html([?#].*)?$/.test(next) ? next : dest;
+
+    if(silent){ window.location.replace(target); return; }
+
+    this.view('done');
+    document.getElementById('done-t').textContent = 'Signed in';
+    document.getElementById('done-p').textContent =
+      role === 'customer' ? 'Taking you to Namma Bazar…' : 'Taking you to your dashboard…';
+    setTimeout(() => { window.location.href = target; }, 900);
+  },
+
+  readable(err){
+    const m = (err && err.message ? err.message : '').toLowerCase();
+    const status = err && err.status;
+    if(!m.trim() || m === '{}'){
+      if(status === 400 || status === 401) return 'Email or password is incorrect.';
+      return 'Could not reach the server. Check your connection and try again.';
+    }
+    if(m.includes('invalid login credentials')) return 'Email or password is incorrect.';
+    if(m.includes('email not confirmed'))       return 'Please confirm your email first — check your inbox for the link.';
+    if(m.includes('already registered') || m.includes('already exists'))
+      return 'An account with this email already exists. Try signing in instead.';
+    if(m.includes('rate limit') || m.includes('too many')) return 'Too many attempts. Please wait a minute and try again.';
+    if(m.includes('failed to fetch')) return 'Could not reach the server. Check your connection.';
+    if(m.includes('password')) return err.message;
+    return err.message || 'Something went wrong. Please try again.';
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => Auth.init());
+
+document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+</script>
+</body>
+</html>
